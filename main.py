@@ -1,9 +1,7 @@
 import pygame
 from pygame.locals import *
-import sys
 from circle import Circle
-from gameObjects import *
-from orb import Orb
+from knife import *
 
 
 def rotate(surface, angle, pivot, offset):
