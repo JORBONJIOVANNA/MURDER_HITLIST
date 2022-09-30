@@ -42,8 +42,9 @@ class Knife(pygame.sprite.Sprite):
             self.move_knife()
 
         if self.state == STUCK:
+            self.stuck_angle += circle.speed
             new_img, new_rect = rotate(
-                self.img, (circle.angle + self.stuck_angle + 90) % 360, circle.pivot, pygame.math.Vector2(0, 100))
+                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 100))
             screen.blit(new_img, new_rect)
             return
 
@@ -74,7 +75,7 @@ class KnivesAirbourne(pygame.sprite.Group):
 
             if entity.location[1] < 400 and entity.state == MOVING:
                 entity.state = STUCK
-                entity.stuck_angle = self.circle.angle
+                entity.stuck_angle = 0
 
         for entity in self.sprites():
             if entity.state == RESTING:

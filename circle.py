@@ -1,5 +1,4 @@
 import pygame
-from regex import W
 
 
 class Circle(pygame.sprite.Sprite):
