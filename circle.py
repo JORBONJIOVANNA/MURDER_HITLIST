@@ -41,12 +41,12 @@ class Circle(pygame.sprite.Sprite):
     def update(self,random):
         speeds = [-2,2,4]
         if random:
-
+            
+            # changes after it rotates 60 degrees
             if self.switch > 60:
                 self.switch = 0
                 index = rd.randint(0,2)
                 self.speed = speeds[index]
-                print(self.speed)
                 
             self.angle += self.speed
             self.switch += abs(self.speed)

@@ -82,7 +82,11 @@ def load_level(level,circle):
 
     score_text = small_font.render(
     'SCORE: {}'.format(user_score), True, BLACK)
+
+    level_text = small_font.render(
+    'LEVEL {}'.format(level), True, WHITE)
     myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
+    myScreen.blit(level_text, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-60))
 
 def main():
 
