@@ -22,33 +22,44 @@ BLACK = (0, 0, 0)
 high_score = 0
 
 
+small_font = pygame.font.SysFont('Verdana', 30)
+big_font = pygame.font.SysFont('Verdana', 45)
+game_name = big_font.render('KNIFE HIT', True, LIGHT_GREY)
+start_text = small_font.render('START', True, BLACK)
 
-small_font = pygame.font.SysFont('Verdana',30)
-big_font = pygame.font.SysFont('Verdana',45)
-game_name = big_font.render('KNIFE HIT' , True , LIGHT_GREY)
-start_text = small_font.render('START' , True , BLACK)
 
-
-def menu_screen(tick,image_index,myScreen):
+def menu_screen(tick, image_index, myScreen, last_score=-1):
     if tick == 5:
         tick = 0
         image_index += 1
         if image_index > 11:
             image_index = 1
-        menu_img = pygame.image.load("resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
+        menu_img = pygame.image.load(
+            "resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
         menu_img = pygame.transform.scale(menu_img, (600, 600))
-        myScreen.blit(menu_img , (0,0))
-    
-    pygame.draw.rect(myScreen,BLACK,[SCREEN_WIDTH/4,SCREEN_HEIGHT/4-90,300,60])
-    myScreen.blit(game_name , (SCREEN_WIDTH/4+30,SCREEN_HEIGHT/4-90))
+        myScreen.blit(menu_img, (0, 0))
 
-    pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3+30,SCREEN_HEIGHT/2-100,140,40])
-    myScreen.blit(start_text , (SCREEN_WIDTH/3+50,SCREEN_HEIGHT/2-100))
+    pygame.draw.rect(myScreen, BLACK, [
+        SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
 
-    high_score_text = small_font.render('HIGH SCORE: {}'.format(high_score) , True , BLACK)
-    pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3-40,SCREEN_HEIGHT-100,300,40])
-    myScreen.blit(high_score_text , (SCREEN_WIDTH/3-10,SCREEN_HEIGHT-100))
+    if last_score == -1:
+        myScreen.blit(game_name, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+    else:
+        last_score_text = big_font.render(
+            "SCORE: {}".format(last_score), True, LIGHT_GREY)
+        myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+
+    pygame.draw.rect(myScreen, DARK_RED, [
+                     SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+    myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+
+    high_score_text = small_font.render(
+        'HIGH SCORE: {}'.format(high_score), True, BLACK)
+    pygame.draw.rect(myScreen, DARK_RED, [
+                     SCREEN_WIDTH/3-40, SCREEN_HEIGHT-100, 300, 40])
+    myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
+
 
 def main():
 
@@ -60,8 +71,6 @@ def main():
 
     pSizeX = 30
     pSizeY = 30
-
-
 
     global myScreen
     global high_score
@@ -86,19 +95,6 @@ def main():
 
     game_start = False
 
-<<<<<<< HEAD
-    small_font = pygame.font.SysFont('Verdana', 30)
-    big_font = pygame.font.SysFont('Verdana', 45)
-    game_name = big_font.render('KNIFE HIT', True, LIGHT_GREY)
-    start_text = small_font.render('START', True, BLACK)
-=======
->>>>>>> 2b0efc4e2e5ef5d9b3d3c58fcec134d60f004a2f
-
-
-
-    
-    
-
     # print(high_score)
     tick = 0
     animation_tick = 0
@@ -107,12 +103,13 @@ def main():
     start_animation = False
 
     user_score = 0
+    last_score = -1
     score_updatable = False
 
     while running:
-        
+
         # get high score
-        with open("high_scores.txt",'r+') as w:
+        with open("high_scores.txt", 'r+') as w:
             lines = w.readlines()
             high_score = int(lines[-1])
 
@@ -147,54 +144,34 @@ def main():
         if game_start and not(start_animation):
 
             myScreen.fill(DARK_RED)
-            game_over,user_score = kA.update(user_score)
+            game_over, user_score = kA.update(user_score)
             circle.show(myScreen)
-<<<<<<< HEAD
-
-        else:
-            if tick == 5:
-                tick = 0
-                image_index += 1
-                if image_index > 11:
-                    image_index = 1
-                menu_img = pygame.image.load(
-                    "resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
-                menu_img = pygame.transform.scale(menu_img, (600, 600))
-                myScreen.blit(menu_img, (0, 0))
-            pygame.draw.rect(myScreen, BLACK, [
-                             SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
-            myScreen.blit(game_name, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
-            pygame.draw.rect(myScreen, DARK_RED, [
-                             SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
-            myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
-=======
-            score_text = small_font.render('SCORE: {}'.format(user_score) , True , BLACK)
-            myScreen.blit(score_text , (SCREEN_WIDTH/3+20,SCREEN_HEIGHT/4-100))
-
+            score_text = small_font.render(
+                'SCORE: {}'.format(user_score), True, BLACK)
+            myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
 
             # resets game
             if game_over:
                 if user_score > high_score:
                     high_score = user_score
-                    with open("high_scores.txt",'w') as w:
+                    with open("high_scores.txt", 'w') as w:
                         w.write(str(high_score))
 
+                last_score = user_score
                 user_score = 0
                 game_start = False
                 tick = 0
-                myScreen.fill((0,0,0))
+                myScreen.fill((0, 0, 0))
                 kA = KnivesAirbourne(myScreen, circle)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
 
                 change_music = True
                 music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
-            
         else:
+            tick, image_index = menu_screen(
+                tick, image_index, myScreen, last_score)
 
-            tick,image_index = menu_screen(tick,image_index,myScreen)
-
->>>>>>> 2b0efc4e2e5ef5d9b3d3c58fcec134d60f004a2f
             if start_animation:
 
                 if animation_tick == 1:
@@ -206,14 +183,6 @@ def main():
                         music = pygame.mixer.music.load(
                             os.path.join(s, 'sound_1.mp3'))
 
-<<<<<<< HEAD
-                    transition = pygame.image.load(
-                        "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
-                    transition = pygame.transform.scale(transition, (600, 600))
-                    myScreen.blit(transition, (0, 0))
-
-=======
->>>>>>> 2b0efc4e2e5ef5d9b3d3c58fcec134d60f004a2f
         pygame.display.update()
         tick += 1
         animation_tick += 1

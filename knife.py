@@ -70,7 +70,6 @@ class KnivesAirbourne(pygame.sprite.Group):
         for entity in self.sprites():
             if entity.state == STUCK and entity != knife:
                 if knife.rect.colliderect(entity.rotated_rect):
-                    print("LOSER")
                     return -1
                 # return 0
 
@@ -79,7 +78,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.state == RESTING:
                 entity.state = MOVING
 
-    def update(self,score):
+    def update(self, score):
         game_over = False
         add_new = True
         is_all_moved = True
@@ -107,5 +106,5 @@ class KnivesAirbourne(pygame.sprite.Group):
 
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
-        
-        return game_over,score
+
+        return game_over, score
