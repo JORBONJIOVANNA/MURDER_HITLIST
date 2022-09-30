@@ -5,6 +5,7 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
+import inventory
 
 
 def main():
