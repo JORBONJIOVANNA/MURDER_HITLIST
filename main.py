@@ -58,7 +58,7 @@ def menu_screen(tick, image_index, myScreen, last_score=-1):
     high_score_text = small_font.render(
         'HIGH SCORE: {}'.format(high_score), True, BLACK)
     pygame.draw.rect(myScreen, DARK_RED, [
-                     SCREEN_WIDTH/3-40, SCREEN_HEIGHT-100, 300, 40])
+                     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
     myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
 
@@ -110,8 +110,9 @@ def main():
 
     clock = pygame.time.Clock()
 
-    music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
-    pygame.mixer.music.play(-1)
+    # music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+    knife_effect = pygame.mixer.Sound(os.path.join(s, 'knife_effect.flac'))
+    # pygame.mixer.music.play(-1)
     change_music = False
     # circle = pygame.image.load("circle.png").convert_alpha()
     # circle = pygame.transform.scale(circle, (200, 200) )
@@ -154,6 +155,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if game_start:
                     if event.button == 1:  # if left click
+                        pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     game_start = True
@@ -172,6 +174,10 @@ def main():
             if user_score > 3 and next_level:
                 level += 1
 
+                #level 2 music
+                pygame.mixer.music.load(os.path.join(s, 'sound_2.mp3'))
+                change_music = True
+                
                 # this is to reset everything and add new knives and circle
                 circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
                 kA = KnivesAirbourne(myScreen, circle)
@@ -201,7 +207,7 @@ def main():
                 kA.add(knife_obj)
 
                 change_music = True
-                music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                # music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         else:
             tick, image_index = menu_screen(
                 tick, image_index, myScreen, last_score)
