@@ -6,6 +6,7 @@ from circle import Circle
 from knife import *
 import os
 
+
 def main():
 
     s = 'sound'
@@ -20,9 +21,9 @@ def main():
     BLUE = (0, 0, 255)
     WHITE = (255, 255, 255)
     GREY = (100, 100, 100)
-    LIGHT_GREY = (60,60,60)
-    DARK_RED = (107,0,0)
-    BLACK = (0,0,0)
+    LIGHT_GREY = (60, 60, 60)
+    DARK_RED = (107, 0, 0)
+    BLACK = (0, 0, 0)
 
     global myScreen
     pygame.init()
@@ -58,7 +59,6 @@ def main():
     start_animation = False
 
     while running:
-        
         if change_music:
             pygame.mixer.music.play(-1)
             change_music = False
@@ -75,7 +75,7 @@ def main():
                 if game_start:
                     if event.button == 1:  # if left click
                         kA.handle_click()
-                elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60: 
+                elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     game_start = True
                     
                     start_animation = True

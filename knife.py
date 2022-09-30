@@ -25,11 +25,12 @@ class Knife(pygame.sprite.Sprite):
             knife, (dimensions[0]/8, dimensions[1]/8))
         self.img = pygame.transform.rotate(knife, 180)
         self.rect = self.img.get_rect()
+        self.rotated_rect = None
 
         self.speed = speed
         self.location = (290, 600)
-        self.shoot_location  = (290, 500)
-        
+        self.shoot_location = (290, 500)
+
         self.state = RESTING
         self.stuck_angle = 0
 
@@ -38,6 +39,8 @@ class Knife(pygame.sprite.Sprite):
                    self.location[1] - self.speed * self.direction.y)
         # screen.blit(self.img, new_pos)
         self.location = new_pos
+        self.rect.x = new_pos[0]
+        self.rect.y = new_pos[1]
 
     def show(self, screen, circle):
         if self.state == MOVING:
@@ -48,9 +51,12 @@ class Knife(pygame.sprite.Sprite):
             new_img, new_rect = rotate(
                 self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 100))
             screen.blit(new_img, new_rect)
+            self.rotated_rect = new_rect
             return
-        if self.location[1] !=self.shoot_location[1]:
+
+        if self.location[1] != self.shoot_location[1]:
             self.move_knife()
+
         screen.blit(self.img, self.location)
 
 
@@ -59,6 +65,12 @@ class KnivesAirbourne(pygame.sprite.Group):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
+
+    def check_collision(self, knife):
+        for entity in self.sprites():
+            if entity.state == STUCK and entity != knife:
+                if knife.rect.colliderect(entity.rotated_rect):
+                    print("LOSER")
 
     def handle_click(self):
         for entity in self.sprites():
@@ -79,6 +91,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.location[1] < 400 and entity.state == MOVING:
                 entity.state = STUCK
                 entity.stuck_angle = 0
+                self.check_collision(entity)
 
         for entity in self.sprites():
             if entity.state == RESTING:
@@ -87,4 +100,3 @@ class KnivesAirbourne(pygame.sprite.Group):
 
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
-            print("Added new knife")
