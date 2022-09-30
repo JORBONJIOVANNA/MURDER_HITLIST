@@ -110,12 +110,12 @@ def main():
 
     clock = pygame.time.Clock()
 
-    # music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+    music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
     knife_effect = pygame.mixer.Sound(os.path.join(s, 'knife_effect.flac'))
-    # pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(0.1)
+    knife_effect.set_volume(0.2)
     change_music = False
-    # circle = pygame.image.load("circle.png").convert_alpha()
-    # circle = pygame.transform.scale(circle, (200, 200) )
 
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
 
@@ -177,7 +177,7 @@ def main():
                 #level 2 music
                 pygame.mixer.music.load(os.path.join(s, 'sound_2.mp3'))
                 change_music = True
-                
+
                 # this is to reset everything and add new knives and circle
                 circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
                 kA = KnivesAirbourne(myScreen, circle)
@@ -207,7 +207,7 @@ def main():
                 kA.add(knife_obj)
 
                 change_music = True
-                # music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         else:
             tick, image_index = menu_screen(
                 tick, image_index, myScreen, last_score)
