@@ -1,4 +1,4 @@
-from py_compile import _get_default_invalidation_mode
+
 import pygame
 from pygame.locals import *
 from circle import Circle
@@ -20,6 +20,8 @@ DARK_RED = (107, 0, 0)
 BLACK = (0, 0, 0)
 
 high_score = 0
+user_score = 0
+game_over = False
 
 
 small_font = pygame.font.SysFont('Verdana', 30)
@@ -60,6 +62,24 @@ def menu_screen(tick, image_index, myScreen, last_score=-1):
     myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
 
+def load_level(num,circle):
+    
+    global user_score
+    global game_over
+
+    # if num == 1:
+    
+    myScreen.fill(DARK_RED)
+
+    game_over, user_score = kA.update(user_score)
+    if num > 1:
+        circle.show(myScreen,1)
+    else:
+        circle.show(myScreen,0)
+
+    score_text = small_font.render(
+    'SCORE: {}'.format(user_score), True, BLACK)
+    myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
 
 def main():
 
@@ -74,6 +94,9 @@ def main():
 
     global myScreen
     global high_score
+    global kA
+    global game_over
+    global user_score
 
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Example 1")
@@ -86,7 +109,7 @@ def main():
     # circle = pygame.image.load("circle.png").convert_alpha()
     # circle = pygame.transform.scale(circle, (200, 200) )
 
-    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0))
+    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
 
     kA = KnivesAirbourne(myScreen, circle)
     knife_obj = Knife((0, 1), 10)
@@ -101,13 +124,13 @@ def main():
     image_index = 1
     start_image_index = 0
     start_animation = False
-
-    user_score = 0
+    level = 1
+    # user_score = 0
     last_score = -1
-    score_updatable = False
-
+    # score_updatable = False
+    next_level = True
     while running:
-
+        pygame.display.update()
         # get high score
         with open("high_scores.txt", 'r+') as w:
             lines = w.readlines()
@@ -142,13 +165,16 @@ def main():
                     circle.decrease_speed()
 
         if game_start and not(start_animation):
-
-            myScreen.fill(DARK_RED)
-            game_over, user_score = kA.update(user_score)
-            circle.show(myScreen)
-            score_text = small_font.render(
-                'SCORE: {}'.format(user_score), True, BLACK)
-            myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
+            
+            if user_score > 3 and next_level:
+                level += 1
+                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
+                kA = KnivesAirbourne(myScreen, circle)
+                knife_obj = Knife((0, 1), 10)
+                kA.add(knife_obj)
+                next_level = False
+                continue
+            load_level(level,circle)
 
             # resets game
             if game_over:
@@ -161,6 +187,8 @@ def main():
                 user_score = 0
                 game_start = False
                 tick = 0
+                animation_tick = 0
+                start_image_index = 0
                 myScreen.fill((0, 0, 0))
                 kA = KnivesAirbourne(myScreen, circle)
                 knife_obj = Knife((0, 1), 10)
@@ -182,8 +210,14 @@ def main():
                         change_music = True
                         music = pygame.mixer.music.load(
                             os.path.join(s, 'sound_1.mp3'))
+                    transition = pygame.image.load(
+                        "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
+                    transition = pygame.transform.scale(transition, (600, 600))
+                    myScreen.blit(transition, (0, 0))
 
-        pygame.display.update()
+                        
+
+        
         tick += 1
         animation_tick += 1
      # pygame.display.flip()
