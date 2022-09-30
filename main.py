@@ -92,8 +92,19 @@ def main():
 
         if game_start and not(start_animation):
             myScreen.fill(DARK_RED)
-            kA.update()
+            game_over = kA.update()
             circle.show(myScreen)
+
+            if game_over:
+                game_start = False
+                tick = 0
+                myScreen.fill((0,0,0))
+                kA = KnivesAirbourne(myScreen, circle)
+                knife_obj = Knife((0, 1), 10)
+                kA.add(knife_obj)
+
+                change_music = True
+                music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
             
         else:
             if tick == 5:
