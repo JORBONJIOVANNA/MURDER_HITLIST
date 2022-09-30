@@ -27,7 +27,9 @@ class Knife(pygame.sprite.Sprite):
         self.rect = self.img.get_rect()
 
         self.speed = speed
-        self.location = (290, 500)
+        self.location = (290, 600)
+        self.shoot_location  = (290, 500)
+        
         self.state = RESTING
         self.stuck_angle = 0
 
@@ -47,7 +49,8 @@ class Knife(pygame.sprite.Sprite):
                 self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 100))
             screen.blit(new_img, new_rect)
             return
-
+        if self.location[1] !=self.shoot_location[1]:
+            self.move_knife()
         screen.blit(self.img, self.location)
 
 
