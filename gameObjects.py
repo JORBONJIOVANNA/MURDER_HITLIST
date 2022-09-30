@@ -17,7 +17,7 @@ class Knife(pygame.sprite.Sprite):
         self.img  = pygame.transform.rotate(knife,180)
 
         self.speed = speed
-        self.location = (225,500)
+        self.location = (290,500)
 
     def move_knife(self,screen):
         new_pos = (self.location[0] - self.speed * self.direction.x,self.location[1] - self.speed * self.direction.y)
