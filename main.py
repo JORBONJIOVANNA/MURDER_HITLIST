@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+from gameObjects import Vector, Knife
 pygame
 
 def main():
@@ -14,8 +15,15 @@ def main():
 
     BLUE = (0, 0, 255)
 
+    global myScreen
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Example 1")
+
+    knife = pygame.image.load("./sword.png").convert_alpha()
+    dimensions = knife.get_size()
+    knife = pygame.transform.scale(knife, (dimensions[0]/8,dimensions[1]/8))
+    knife = pygame.transform.rotate(knife,180)
+    knife_obj = Knife((0,1),knife,10)
 
 
     clock = pygame.time.Clock()
@@ -35,13 +43,13 @@ def main():
     while running:
         
         clock.tick(60)
-        
+        myScreen.fill(BLUE)    
+        knife_obj.move_knife(myScreen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 running = False
-            myScreen.fill(BLUE)    
-            pygame.display.update() 
-        
+        pygame.display.update() 
+    
     # pygame.display.flip()
     
 
