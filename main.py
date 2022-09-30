@@ -49,7 +49,7 @@ def main():
     moveRight = False
     moveUp = False
     moveDown = False
-    circle = pygame.image.load("circle.png")
+    circle = pygame.image.load("circle.png").convert_alpha()
     circle = pygame.transform.scale(circle, (200,200))
     # pygame.draw.polygon(circle, pygame.Color('dodgerblue3'), ((0, 0), (140, 30), (0, 60)))
     pivot = [300, 300]
@@ -71,11 +71,16 @@ def main():
                 if event.button == 1: #if left click 
                     kA.add(Knife((0,1),10))
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_UP:
                     if speed > 16:
                         speed = 12
                     else:
                         speed += 2
+                if event.key == pygame.K_DOWN:
+                    if speed < 4:
+                        speed = 2
+                    else:
+                        speed -= 2
             
         angle += speed
         rotated_image, rect = rotate(circle, angle, pivot, offset)
