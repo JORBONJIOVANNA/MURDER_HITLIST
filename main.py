@@ -2,7 +2,9 @@ import pygame
 from pygame.locals import *
 import sys
 from gameObjects import *
+from orb import Orb
 pygame
+
 
 def main():
     SCREEN_WIDTH = 600
@@ -14,6 +16,7 @@ def main():
     pSizeY = 30
 
     BLUE = (0, 0, 255)
+    WHITE = (255, 255, 255)
 
     global myScreen
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -25,37 +28,38 @@ def main():
     # knife = pygame.transform.rotate(knife,180)
     # knife_obj = Knife((0,1),knife,10)
     kA = KnivesAirbourne(myScreen)
-    knife_obj = Knife((0,1),10)
+    knife_obj = Knife((0, 1), 10)
+
+    orb = Orb((225, 100))
 
     clock = pygame.time.Clock()
 
+    move_left = False
+    move_right = False
+    move_up = False
+    move_down = False
 
-    moveLeft = False
-    moveRight = False
-    moveUp = False
-    moveDown = False
-
-
-
-    # (x, y) 
-
+    # (x, y)
 
     running = True
     while running:
-        
         clock.tick(60)
-        myScreen.fill(BLUE)    
+        myScreen.fill(WHITE)
+
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: 
+            if event.type == pygame.QUIT:
                 running = False
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1: #if left click 
-                    kA.add(Knife((0,1),10))
+                if event.button == 1:  # if left click
+                    kA.add(Knife((0, 1), 10))
 
         kA.update()
-        pygame.display.update() 
-    
-    # pygame.display.flip()
-    
+        orb.draw(myScreen)
+        pygame.display.update()
 
-if __name__ == '__main__': main()
+    # pygame.display.flip()
+
+
+if __name__ == '__main__':
+    main()
