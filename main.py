@@ -43,6 +43,7 @@ def main():
     knife_obj = Knife((0, 1), 10)
     kA.add(knife_obj)
     running = True
+
     game_start = False
 
     small_font = pygame.font.SysFont('Verdana', 30)
