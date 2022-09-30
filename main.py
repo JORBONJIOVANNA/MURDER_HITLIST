@@ -62,7 +62,7 @@ def menu_screen(tick, image_index, myScreen, last_score=-1):
     myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
 
-def load_level(num,circle):
+def load_level(level,circle):
     
     global user_score
     global game_over
@@ -72,7 +72,10 @@ def load_level(num,circle):
     myScreen.fill(DARK_RED)
 
     game_over, user_score = kA.update(user_score)
-    if num > 1:
+
+    # temporary, so after level 1 we add randomness to the circle movement
+    # implemented in circle.update()
+    if level > 1:
         circle.show(myScreen,1)
     else:
         circle.show(myScreen,0)
@@ -125,7 +128,7 @@ def main():
     level = 1
     last_score = -1
     next_level = True
-    
+
     while running:
         pygame.display.update()
         # get high score
