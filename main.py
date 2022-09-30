@@ -51,14 +51,30 @@ def main():
     big_font = pygame.font.SysFont('Verdana',45)
     game_name = big_font.render('KNIFE HIT' , True , LIGHT_GREY)
     start_text = small_font.render('START' , True , BLACK)
+    
+    
+    high_score = 0
 
+    
+    
+
+    # print(high_score)
     tick = 0
     animation_tick = 0
     image_index = 1
     start_image_index = 0
     start_animation = False
 
+    user_score = 0
+    score_updatable = False
+
     while running:
+        
+        # get high score
+        with open("high_scores.txt",'r+') as w:
+            lines = w.readlines()
+            high_score = int(lines[-1])
+
         if change_music:
             pygame.mixer.music.play(-1)
             change_music = False
@@ -75,6 +91,7 @@ def main():
                 if game_start:
                     if event.button == 1:  # if left click
                         kA.handle_click()
+                        score_updatable = True
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     game_start = True
                     
@@ -94,8 +111,16 @@ def main():
             myScreen.fill(DARK_RED)
             game_over = kA.update()
             circle.show(myScreen)
+            score_text = small_font.render('SCORE: {}'.format(user_score) , True , BLACK)
+            myScreen.blit(score_text , (SCREEN_WIDTH/3+20,SCREEN_HEIGHT/4-100))
 
             if game_over:
+                if user_score > high_score:
+                    high_score = user_score - 1
+                    with open("high_scores.txt",'w') as w:
+                        w.write(str(high_score))
+
+                user_score = 0
                 game_start = False
                 tick = 0
                 myScreen.fill((0,0,0))
@@ -105,6 +130,12 @@ def main():
 
                 change_music = True
                 music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+            else:
+
+                # only true when mouse clicked, to avoid incrementing even when knife is not thrown
+                if score_updatable:
+                    user_score += 1
+                    score_updatable = False
             
         else:
             if tick == 5:
@@ -115,10 +146,18 @@ def main():
                 menu_img = pygame.image.load("resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
                 menu_img = pygame.transform.scale(menu_img, (600, 600))
                 myScreen.blit(menu_img , (0,0))
+
+            # menu screen
             pygame.draw.rect(myScreen,BLACK,[SCREEN_WIDTH/4,SCREEN_HEIGHT/4-90,300,60])
             myScreen.blit(game_name , (SCREEN_WIDTH/4+30,SCREEN_HEIGHT/4-90))
+
             pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3+30,SCREEN_HEIGHT/2-100,140,40])
             myScreen.blit(start_text , (SCREEN_WIDTH/3+50,SCREEN_HEIGHT/2-100))
+
+            high_score_text = small_font.render('HIGH SCORE: {}'.format(high_score) , True , BLACK)
+            pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3-40,SCREEN_HEIGHT-100,300,40])
+            myScreen.blit(high_score_text , (SCREEN_WIDTH/3-10,SCREEN_HEIGHT-100))
+
             if start_animation:
                 
                 if animation_tick == 1:
