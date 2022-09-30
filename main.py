@@ -1,9 +1,7 @@
 import pygame
 from pygame.locals import *
-import sys
 from circle import Circle
-from gameObjects import *
-from orb import Orb
+from knife import *
 
 
 def rotate(surface, angle, pivot, offset):
@@ -40,9 +38,6 @@ def main():
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Example 1")
 
-    kA = KnivesAirbourne(myScreen)
-    knife_obj = Knife((0, 1), 10)
-
     clock = pygame.time.Clock()
 
     move_left = False
@@ -54,7 +49,12 @@ def main():
 
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0))
 
+    kA = KnivesAirbourne(myScreen, circle)
+    knife_obj = Knife((0, 1), 10)
+    kA.add(knife_obj)
+
     running = True
+
     while running:
         clock.tick(60)
 
@@ -66,7 +66,7 @@ def main():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # if left click
-                    kA.add(Knife((0, 1), 10))
+                    kA.handle_click()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     circle.increase_speed()
