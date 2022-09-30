@@ -2,9 +2,11 @@ import pygame
 from pygame.locals import *
 from circle import Circle
 from knife import *
-
+import os
 
 def main():
+
+    s = 'sound'
     SCREEN_WIDTH = 600
     SCREEN_HEIGHT = 600
 
@@ -18,15 +20,14 @@ def main():
     GREY = (100, 100, 100)
 
     global myScreen
+    pygame.mixer.init()
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Example 1")
 
     clock = pygame.time.Clock()
 
-    move_left = False
-    move_right = False
-    move_up = False
-    move_down = False
+    music = pygame.mixer.music.load(os.path.join(s, 'sound_1.mp3'))
+    pygame.mixer.music.play(-1)
     # circle = pygame.image.load("circle.png").convert_alpha()
     # circle = pygame.transform.scale(circle, (200, 200) )
 
