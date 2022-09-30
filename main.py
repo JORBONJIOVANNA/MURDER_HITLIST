@@ -40,6 +40,7 @@ def main():
 
     kA = KnivesAirbourne(myScreen)
     knife_obj = Knife((0, 1), 10)
+    kA.add(knife_obj)
 
     clock = pygame.time.Clock()
 
@@ -53,6 +54,7 @@ def main():
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0))
 
     running = True
+
     while running:
         clock.tick(60)
 
@@ -64,7 +66,7 @@ def main():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # if left click
-                    kA.add(Knife((0, 1), 10))
+                    kA.handle_click()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     circle.increase_speed()
