@@ -91,7 +91,7 @@ def main():
                     circle.decrease_speed()
 
         if game_start and not(start_animation):
-            myScreen.fill(GREY)
+            myScreen.fill(DARK_RED)
             kA.update()
             circle.show(myScreen)
             
