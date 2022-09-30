@@ -1,4 +1,5 @@
 from py_compile import _get_default_invalidation_mode
+import tracemalloc
 import pygame
 from pygame.locals import *
 from circle import Circle
@@ -49,6 +50,13 @@ def main():
     big_font = pygame.font.SysFont('Verdana',45)
     game_name = big_font.render('KNIFE HIT' , True , LIGHT_GREY)
     start_text = small_font.render('START' , True , BLACK)
+
+    tick = 0
+    animation_tick = 0
+    image_index = 1
+    start_image_index = 0
+    start_animation = False
+
     while running:
         
         if change_music:
@@ -57,7 +65,7 @@ def main():
 
         clock.tick(60)
         mouse = pygame.mouse.get_pos()
-        myScreen.fill(GREY)
+        # myScreen.fill(GREY)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -70,6 +78,8 @@ def main():
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60: 
                     game_start = True
                     change_music = True
+                    # start_animation = True
+                    animation_tick = 0
                     music = pygame.mixer.music.load(os.path.join(s, 'sound_1.mp3'))
 
 
@@ -85,14 +95,37 @@ def main():
             kA.update()
             circle.show(myScreen)
         else:
+            if tick == 5:
+                tick = 0
+                image_index += 1
+                if image_index > 11:
+                    image_index = 1
+                menu_img = pygame.image.load("resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
+                menu_img = pygame.transform.scale(menu_img, (600, 600))
+                myScreen.blit(menu_img , (0,0))
             pygame.draw.rect(myScreen,BLACK,[SCREEN_WIDTH/4,SCREEN_HEIGHT/4-90,300,60])
             myScreen.blit(game_name , (SCREEN_WIDTH/4+30,SCREEN_HEIGHT/4-90))
             pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3+30,SCREEN_HEIGHT/2-100,140,40])
             myScreen.blit(start_text , (SCREEN_WIDTH/3+50,SCREEN_HEIGHT/2-100))
+            # if start_animation:
+                
+            #     if animation_tick == 5:
+            #         # print("lol")
+            #         animation_tick = 0
+            #         start_image_index += 1
+            #         if start_image_index > 150:
+            #             start_animation = False
+                    
+            #         transition = pygame.image.load("resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
+            #         print("resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index))
+            #         transition = pygame.transform.scale(transition, (600, 600))
+            #         myScreen.blit(transition , (0,0))
+
             
 
         pygame.display.update()
-
+        tick += 1
+        animation_tick += 1
      # pygame.display.flip()
 
 
