@@ -118,17 +118,14 @@ def main():
 
     game_start = False
 
-    # print(high_score)
     tick = 0
-    animation_tick = 0
     image_index = 1
     start_image_index = 0
     start_animation = False
     level = 1
-    # user_score = 0
     last_score = -1
-    # score_updatable = False
     next_level = True
+    
     while running:
         pygame.display.update()
         # get high score
@@ -155,7 +152,6 @@ def main():
                     game_start = True
 
                     start_animation = True
-                    animation_tick = 0
 
             elif event.type == pygame.KEYDOWN and game_start:
 
@@ -168,11 +164,15 @@ def main():
             
             if user_score > 3 and next_level:
                 level += 1
+
+                # this is to reset everything and add new knives and circle
                 circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
                 kA = KnivesAirbourne(myScreen, circle)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
                 next_level = False
+                # continue coz we need to get rid of the old stuff bu sending it to the pygame.update line
+                # with this continue keyword
                 continue
             load_level(level,circle)
 
@@ -187,7 +187,6 @@ def main():
                 user_score = 0
                 game_start = False
                 tick = 0
-                animation_tick = 0
                 start_image_index = 0
                 myScreen.fill((0, 0, 0))
                 kA = KnivesAirbourne(myScreen, circle)
@@ -201,25 +200,24 @@ def main():
                 tick, image_index, myScreen, last_score)
 
             if start_animation:
+                
+                start_image_index += 1
 
-                if animation_tick == 1:
-                    animation_tick = 0
-                    start_image_index += 1
-                    if start_image_index > 150:
-                        start_animation = False
-                        change_music = True
-                        music = pygame.mixer.music.load(
-                            os.path.join(s, 'sound_1.mp3'))
-                    transition = pygame.image.load(
-                        "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
-                    transition = pygame.transform.scale(transition, (600, 600))
-                    myScreen.blit(transition, (0, 0))
+                #coz there are 150 pictures for that animation, we wanna stop once we are done with them
+                if start_image_index > 150:
+                    start_animation = False
+                    change_music = True
+                    music = pygame.mixer.music.load(
+                        os.path.join(s, 'sound_1.mp3'))
+                transition = pygame.image.load(
+                    "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
+                transition = pygame.transform.scale(transition, (600, 600))
+                myScreen.blit(transition, (0, 0))
 
                         
 
         
         tick += 1
-        animation_tick += 1
      # pygame.display.flip()
 
 
