@@ -49,15 +49,14 @@ def main():
     moveRight = False
     moveUp = False
     moveDown = False
-    circle = pygame.image.load("circle.png").convert_alpha()
-    circle = pygame.transform.scale(circle, (200,200))
+    # circle = pygame.image.load("circle.png").convert_alpha()
+    # circle = pygame.transform.scale(circle, (200,200))
+    circle = Circle(myScreen)
     # pygame.draw.polygon(circle, pygame.Color('dodgerblue3'), ((0, 0), (140, 30), (0, 60)))
-    pivot = [300, 300]
-    offset = pygame.math.Vector2(0, 0)
-    angle = 0
-    # (x, y) 
-    # how fast the circle rotates
-    speed = 2
+    # pivot = [300, 300]
+    # offset = pygame.math.Vector2(0, 0)
+    # angle = 0
+    # speed = 2
 
     running = True
     while running:
@@ -82,9 +81,10 @@ def main():
                     else:
                         speed -= 2
             
-        angle += speed
-        rotated_image, rect = rotate(circle, angle, pivot, offset)
-        myScreen.blit(rotated_image, rect)
+        # angle += speed
+        # rotated_image, rect = rotate(circle, angle, pivot, offset)
+        # myScreen.blit(rotated_image, rect)
+        circle.rotate_circle()
         kA.update()
         pygame.display.update() 
     
