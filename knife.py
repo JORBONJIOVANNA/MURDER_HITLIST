@@ -79,7 +79,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.state == RESTING:
                 entity.state = MOVING
 
-    def update(self):
+    def update(self,score):
         game_over = False
         add_new = True
         is_all_moved = True
@@ -98,6 +98,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                     game_over = True
                 else:
                     game_over = False
+                    score += 1
 
         for entity in self.sprites():
             if entity.state == RESTING:
@@ -107,4 +108,4 @@ class KnivesAirbourne(pygame.sprite.Group):
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
         
-        return game_over
+        return game_over,score
