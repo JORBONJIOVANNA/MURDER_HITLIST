@@ -38,10 +38,6 @@ def main():
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Example 1")
 
-    kA = KnivesAirbourne(myScreen)
-    knife_obj = Knife((0, 1), 10)
-    kA.add(knife_obj)
-
     clock = pygame.time.Clock()
 
     move_left = False
@@ -52,6 +48,10 @@ def main():
     # circle = pygame.transform.scale(circle, (200, 200) )
 
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0))
+
+    kA = KnivesAirbourne(myScreen, circle)
+    knife_obj = Knife((0, 1), 10)
+    kA.add(knife_obj)
 
     running = True
 

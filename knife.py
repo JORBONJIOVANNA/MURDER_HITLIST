@@ -3,6 +3,7 @@ from pygame.locals import *
 
 RESTING = 0
 MOVING = 1
+STUCK = 2
 
 
 class Vector:
@@ -40,13 +41,15 @@ class Knife(pygame.sprite.Sprite):
 
 
 class KnivesAirbourne(pygame.sprite.Group):
-    def __init__(self, screen):
+    def __init__(self, screen, circle):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
+        self.circle = circle
 
     def handle_click(self):
         for entity in self.sprites():
-            entity.state = MOVING
+            if entity.state == RESTING:
+                entity.state = MOVING
 
     def update(self):
         add_new = True
@@ -56,11 +59,14 @@ class KnivesAirbourne(pygame.sprite.Group):
             # entity.move_knife()
             entity.show(self.screen)
 
-            if entity.location[1] > 0:
+            if entity.location[1] > 0 and entity.state != STUCK:
                 add_new = False
 
+            if entity.location[1] < 400:
+                entity.state = STUCK
+
         for entity in self.sprites():
-            if entity.state != MOVING:
+            if entity.state == RESTING:
                 is_all_moved = False
                 break
 
