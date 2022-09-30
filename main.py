@@ -65,7 +65,7 @@ def main():
 
         clock.tick(60)
         mouse = pygame.mouse.get_pos()
-        # myScreen.fill(GREY)
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -77,10 +77,10 @@ def main():
                         kA.handle_click()
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60: 
                     game_start = True
-                    change_music = True
-                    # start_animation = True
+                    
+                    start_animation = True
                     animation_tick = 0
-                    music = pygame.mixer.music.load(os.path.join(s, 'sound_1.mp3'))
+                    
 
 
             elif event.type == pygame.KEYDOWN and game_start:
@@ -90,10 +90,11 @@ def main():
                 if event.key == pygame.K_DOWN:
                     circle.decrease_speed()
 
-        if game_start:
-
+        if game_start and not(start_animation):
+            myScreen.fill(GREY)
             kA.update()
             circle.show(myScreen)
+            
         else:
             if tick == 5:
                 tick = 0
@@ -107,19 +108,20 @@ def main():
             myScreen.blit(game_name , (SCREEN_WIDTH/4+30,SCREEN_HEIGHT/4-90))
             pygame.draw.rect(myScreen,DARK_RED,[SCREEN_WIDTH/3+30,SCREEN_HEIGHT/2-100,140,40])
             myScreen.blit(start_text , (SCREEN_WIDTH/3+50,SCREEN_HEIGHT/2-100))
-            # if start_animation:
+            if start_animation:
                 
-            #     if animation_tick == 5:
-            #         # print("lol")
-            #         animation_tick = 0
-            #         start_image_index += 1
-            #         if start_image_index > 150:
-            #             start_animation = False
+                if animation_tick == 1:
+                    # print("lol")
+                    animation_tick = 0
+                    start_image_index += 1
+                    if start_image_index > 150:
+                        start_animation = False
+                        change_music = True
+                        music = pygame.mixer.music.load(os.path.join(s, 'sound_1.mp3'))
                     
-            #         transition = pygame.image.load("resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
-            #         print("resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index))
-            #         transition = pygame.transform.scale(transition, (600, 600))
-            #         myScreen.blit(transition , (0,0))
+                    transition = pygame.image.load("resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
+                    transition = pygame.transform.scale(transition, (600, 600))
+                    myScreen.blit(transition , (0,0))
 
             
 
