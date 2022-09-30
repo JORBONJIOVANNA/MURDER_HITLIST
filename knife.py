@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 
+from utils import rotate
+
 RESTING = 0
 MOVING = 1
 STUCK = 2
@@ -22,10 +24,12 @@ class Knife(pygame.sprite.Sprite):
         knife = pygame.transform.scale(
             knife, (dimensions[0]/8, dimensions[1]/8))
         self.img = pygame.transform.rotate(knife, 180)
+        self.rect = self.img.get_rect()
 
         self.speed = speed
         self.location = (290, 500)
         self.state = RESTING
+        self.stuck_angle = 0
 
     def move_knife(self):
         new_pos = (self.location[0] - self.speed * self.direction.x,
@@ -33,9 +37,15 @@ class Knife(pygame.sprite.Sprite):
         # screen.blit(self.img, new_pos)
         self.location = new_pos
 
-    def show(self, screen):
+    def show(self, screen, circle):
         if self.state == MOVING:
             self.move_knife()
+
+        if self.state == STUCK:
+            new_img, new_rect = rotate(
+                self.img, (circle.angle + self.stuck_angle + 90) % 360, circle.pivot, pygame.math.Vector2(0, 100))
+            screen.blit(new_img, new_rect)
+            return
 
         screen.blit(self.img, self.location)
 
@@ -57,13 +67,14 @@ class KnivesAirbourne(pygame.sprite.Group):
 
         for entity in self.sprites():
             # entity.move_knife()
-            entity.show(self.screen)
+            entity.show(self.screen, self.circle)
 
             if entity.location[1] > 0 and entity.state != STUCK:
                 add_new = False
 
-            if entity.location[1] < 400:
+            if entity.location[1] < 400 and entity.state == MOVING:
                 entity.state = STUCK
+                entity.stuck_angle = self.circle.angle
 
         for entity in self.sprites():
             if entity.state == RESTING:
