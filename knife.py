@@ -90,7 +90,11 @@ class Powerup(pygame.sprite.Sprite):
             self.rect = None
             self.rotated_rect = None
             return
-            
+        
+        dimensions = img.get_size()
+        img = pygame.transform.scale(
+            img, (dimensions[0]*0.5, dimensions[1]*0.5))
+
         self.img = pygame.transform.rotate(img, 180)
         self.rect = self.img.get_rect()
         self.rotated_rect = None
@@ -101,7 +105,7 @@ class Powerup(pygame.sprite.Sprite):
         self.rect.y = 400
         self.angle += circle.speed
         new_img, new_rect = rotate(
-            self.img, self.angle, circle.pivot, pygame.math.Vector2(0, 120))
+            self.img, self.angle, circle.pivot, pygame.math.Vector2(0, 115))
         screen.blit(new_img, new_rect)
         self.rotated_rect = new_rect
 
@@ -113,7 +117,7 @@ class KnivesAirbourne(pygame.sprite.Group):
         for x in range(number_knives):
             knife = Knife((0, 0), 0)
             knife.state = STUCK
-            rand_angle = random.randrange(0,360,10)
+            rand_angle = random.randrange(0,360,30)
             knife.stuck_angle = rand_angle
             angles.append(rand_angle)
             self.add(knife)
@@ -123,7 +127,7 @@ class KnivesAirbourne(pygame.sprite.Group):
         chance = random.randrange(0,100)
         y = 0
         for x in [EXTRALIFE_PERCENTAGE, SLOWTIME_PERCENTAGE,SHRINK_PERCENTAGE]:
-            # if chance < x:
+            if chance < x:
                 obj = Powerup(y)
                 
                 while(True):
@@ -133,8 +137,9 @@ class KnivesAirbourne(pygame.sprite.Group):
                 obj.angle = rand_angle
                 angles.append(rand_angle)
                 self.add(obj)
-                y+=1
-#            y +=1
+                break
+                # y+=1
+            y +=1
 
 
     
@@ -157,7 +162,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 if entity.state == STUCK and entity != knife:
                     
                     # checks collision
-                    if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
+                    if 300 <= entity.rotated_rect.x <= 310 and 370 <= entity.rotated_rect.y <= 405:
                         return -1
                     # return 0
 

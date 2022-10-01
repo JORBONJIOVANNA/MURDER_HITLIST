@@ -3,13 +3,8 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
-<<<<<<< HEAD
 from inventory import *
-
-=======
-import inventory
 import random
->>>>>>> origin/HrudayAlistairMerge
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
