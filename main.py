@@ -4,8 +4,6 @@ from circle import Circle
 from knife import *
 import os
 from inventory import *
-
-import inventory
 import random
 
 SCREEN_WIDTH = 600
