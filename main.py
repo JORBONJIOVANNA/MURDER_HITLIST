@@ -3,7 +3,8 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
-
+import inventory
+import random
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
@@ -12,7 +13,6 @@ pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("KNIFE HIT")
-
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -27,6 +27,10 @@ game_over = False
 
 level_goal = 2
 knife_added = 0
+score_list = []
+rank = 11
+name_input = ''
+write_name = False
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
@@ -39,12 +43,46 @@ circle_2 = pygame.image.load(
     "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
+smallest_font = pygame.font.SysFont('Helvetica', 30)
 small_font = pygame.font.SysFont('Helvetica', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
 game_name = big_font.render('KNIFE HIT', True, WHITE)
+
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
 choose_text = small_font.render('CHOOSE', True, BLACK)
+
+#When game asks for user input, this is purely rendering the screen
+def insert_name(tick, image_index, myScreen, level):
+    global name_input
+    global rank
+    
+    #Rendering    
+    if tick == 5:
+        tick = 0
+        image_index += 1
+        if image_index > 11:
+            image_index = 1
+        menu_img = pygame.image.load(
+            "resources/menu_images/frame_{}.gif".format(image_index)).convert_alpha()
+        menu_img = pygame.transform.scale(menu_img, (600, 600))
+        myScreen.blit(menu_img, (0, 0))
+
+    success_message_1 = smallest_font.render('Well done Murderer! You reached level {} which is rank {}!'.format(level, rank+1), True, WHITE)
+    success_message_2 = smallest_font.render('Please enter your name to go on Serial Killer List', True, WHITE)
+    myScreen.blit(success_message_1, (15, SCREEN_HEIGHT/3-60))
+    myScreen.blit(success_message_2, (50, SCREEN_HEIGHT/3-40))
+
+    pygame.draw.rect(myScreen, DARK_RED, [SCREEN_WIDTH/4, SCREEN_HEIGHT/2-100, SCREEN_WIDTH/2, 40])
+
+    if(pygame.time.get_ticks()%1000 < 500):
+        name_output = smallest_font.render(name_input, True, WHITE)
+    else:
+        name_output = smallest_font.render(name_input + "|", True, WHITE)
+    
+    myScreen.blit(name_output, (SCREEN_WIDTH/4+10, SCREEN_HEIGHT/3+10))
+
+    return tick, image_index
 
 
 def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1):
@@ -137,7 +175,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
 
 
 def load_level(level, circle):
-
     global user_score
     global game_over
     global knife_added
@@ -175,6 +212,52 @@ def load_level(level, circle):
 
 
 def main():
+    #Helper functions for main() functions
+    def reset_game():
+        global myScreen
+        global high_score
+        global kA
+        global game_over
+        global user_score
+        global write_name
+        global name_input
+
+        nonlocal game_start
+        nonlocal tick
+        nonlocal start_image_index
+        nonlocal level
+        nonlocal last_score
+        nonlocal change_music
+        nonlocal music
+
+        last_score = level
+        user_score = 0
+        game_start = False
+        game_over = False
+        write_name = False
+        name_input = ""
+        tick = 0
+        level = 1
+        start_image_index = 0
+        myScreen.fill((0, 0, 0))
+        kA = KnivesAirbourne(myScreen, circle,level)
+        knife_obj = Knife((0, 1), 10)
+        kA.add(knife_obj)
+        change_music = True
+        music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+
+    def activate_name_screen():
+        global myScreen
+        global game_over
+        global write_name
+        nonlocal change_music
+        nonlocal music
+
+        myScreen.fill((0, 0, 0))
+        change_music = True
+        game_over = True
+        music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+        write_name = True
 
     s = 'sound'
     # SCREEN_WIDTH = 600
@@ -190,10 +273,10 @@ def main():
     global kA
     global game_over
     global user_score
-    global knife_added
-    global level_goal
 
-    circle_path = circle_1_path
+    myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Example 1")
+
     clock = pygame.time.Clock()
 
     music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
@@ -228,8 +311,12 @@ def main():
         pygame.display.update()
         # get high score
         with open("high_scores.txt", 'r+') as w:
-            lines = w.readlines()
-            high_score = int(lines[-1])
+            try:
+                line = w.readline().split(",")
+                high_score = int(line[1])
+            
+            except:
+                high_score = 0
 
         if change_music:
             pygame.mixer.music.play(-1)
@@ -242,7 +329,25 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.KEYDOWN and write_name:
+                if event.key == pygame.K_BACKSPACE:
+                    name_input = name_input[:-1]
+
+                elif event.key == pygame.K_RETURN:
+
+                    score_list.insert(rank, (name_input, level))
+                    with open("high_scores.txt", 'w') as w:
+                        for i in range(0, min(10, len(score_list))):
+                            tuple = score_list[i]
+                            rank_i_person = "{},{}\n".format(tuple[0], tuple[1])
+                            w.write(rank_i_person)
+                    score_list = score_list[0 : min(10, len(score_list))]
+                    reset_game()
+
+                else:
+                    name_input += event.unicode
+
+            elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
                 if game_start:
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
@@ -260,20 +365,15 @@ def main():
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+3, circle_path)
 
-            # elif event.type == pygame.KEYDOWN and game_start:
-
-            #     if event.key == pygame.K_UP:
-            #         circle.increase_speed()
-            #     if event.key == pygame.K_DOWN:
-            #         circle.decrease_speed()
-
-        if game_start and not(start_animation):
+        #Playing game part
+        if game_start and not(start_animation) and and not(write_name):
 
             if knife_added >= level_goal and next_level:
                 level += 1
-
-                # level 2 music
-                pygame.mixer.music.load(os.path.join(s, 'sound_2.mp3'))
+                user_score = 0
+                #next level music
+                mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
+                pygame.mixer.music.load(os.path.join(s, mp3_name))
                 change_music = True
 
                 # this is to reset everything and add new knives and circle
@@ -292,28 +392,46 @@ def main():
             load_level(level, circle)
 
             # resets game
+            # resets game
             if game_over:
-                if user_score > high_score:
-                    high_score = user_score
-                    with open("high_scores.txt", 'w') as w:
-                        w.write(str(high_score))
+                #Check if potential highscore
+                if len(score_list) == 0:
+                    rank = 0
+                    activate_name_screen()
 
-                last_score = user_score
-                user_score = 0
-                game_start = False
-                tick = 0
-                level = 1
-                level_goal = 2
-                next_goal = 2
-                knife_added = 0
-                start_image_index = 0
-                myScreen.fill((0, 0, 0))
-                kA = KnivesAirbourne(myScreen, circle, level)
-                knife_obj = Knife((0, 1), 10)
-                kA.add(knife_obj)
+                elif len(score_list) == 1:
+                    if score_list[0][1] >= level:
+                        rank = 1
+                    else:
+                        rank = 0
+                    activate_name_screen()
 
-                change_music = True
-                music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                elif len(score_list) > 1:
+                    found_rank = False
+                    for i in range(0, min(9, len(score_list)-1)):
+                        if(level <= score_list[i][1] and level >= score_list[i+1][1]):
+                            rank = i+1
+                            found_rank = True
+                            break
+                        else:
+                            rank = 11
+
+                    if(len(score_list) == 10 and score_list[-1][1] == level):
+                        reset_game()
+
+                    elif rank <= 9:
+                        activate_name_screen()
+
+                    elif(len(score_list) < 10 and not(found_rank)):
+                        rank = len(score_list)
+                        activate_name_screen()
+                    
+                    else:
+                        reset_game()
+        #If asking for user input for new high score
+        """elif write_name:
+            tick, image_index = insert_name(tick, image_index, myScreen, level)"""
+
         else:
             tick, image_index = menu_screen(
                 tick, image_index, myScreen, customization_screen, last_score)
@@ -327,16 +445,21 @@ def main():
                     start_animation = False
                     game_start = True
                     change_music = True
+                    mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
                     music = pygame.mixer.music.load(
-                        os.path.join(s, 'sound_1.mp3'))
+                        os.path.join(s, mp3_name))
                 transition = pygame.image.load(
                     "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
                 transition = pygame.transform.scale(transition, (600, 600))
                 myScreen.blit(transition, (0, 0))
-
         tick += 1
      # pygame.display.flip()
 
 
 if __name__ == '__main__':
+    #Load score list
+    with open("high_scores.txt", 'r') as hs:
+        for line in hs.readlines():
+            cur_line = line.strip().split(",")
+            score_list.append((cur_line[0], int(cur_line[1])))
     main()

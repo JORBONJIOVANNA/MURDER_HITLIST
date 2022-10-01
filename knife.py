@@ -71,11 +71,11 @@ class KnivesAirbourne(pygame.sprite.Group):
         self.screen = screen
         self.circle = circle
         number_knives = level
-        for x in range(number_knives):
-            knife = Knife((0, 0), 0)
-            knife.state = STUCK
-            knife.stuck_angle = random.randrange(0, 360, 10)
-            self.add(knife)
+        # for x in range(number_knives):
+        #     knife = Knife((0, 0), 0)
+        #     knife.state = STUCK
+        #     knife.stuck_angle = random.randrange(0,360,10)
+        #     self.add(knife)
 
     def check_collision(self, knife):
         for entity in self.sprites():
@@ -122,3 +122,6 @@ class KnivesAirbourne(pygame.sprite.Group):
             self.add(Knife((0, 1), 10))
 
         return game_over, score, knife_added
+## Make the game score as how many levels beat
+## When a level is over to load next level
+## Top 10 scores <- good

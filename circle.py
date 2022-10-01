@@ -17,8 +17,8 @@ class Circle(pygame.sprite.Sprite):
         self.angle = 0
         self.switch = 0
         self.last_angle = 0
-        self.speed = speed
-        self.num = self.speed
+        self.speed = rd.randint(1, speed%12)+1
+        self.num = rd.randint(0, speed%10)+3
         self.pivot = pivot
         self.offset = offset
 
@@ -54,6 +54,7 @@ class Circle(pygame.sprite.Sprite):
             self.angle += self.speed
 
     def show(self, screen,random):
+        
         self.update(random)
         img, rect = self.rotate()
         screen.blit(img, rect)
