@@ -480,9 +480,9 @@ def main():
                     level += 1
                     user_score = 0
                     # next level music
-                    mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
-                    pygame.mixer.music.load(os.path.join(s, mp3_name))
-                    change_music = True
+                    # mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
+                    # pygame.mixer.music.load(os.path.join(s, mp3_name))
+                    # change_music = True
 
                     # this is to reset everything and add new knives and circle
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
@@ -577,6 +577,6 @@ if __name__ == '__main__':
     # Load score list
     with open("high_scores.txt", 'r') as hs:
         for line in hs.readlines():
-            cur_line = line.strip().split(",")
+            cur_line = line.strip().rsplit(',', 1)
             score_list.append((cur_line[0], int(cur_line[1])))
     main()
