@@ -21,10 +21,12 @@ GREY = (100, 100, 100)
 LIGHT_GREY = (60, 60, 60)
 DARK_RED = (107, 0, 0)
 BLACK = (0, 0, 0)
+NEW_BLACK = (58, 58, 58)
 
 high_score = 0
 user_score = 0
 game_over = False
+level_color = DARK_RED
 
 level_goal = 2
 knife_added = 0
@@ -218,10 +220,10 @@ def load_level(level, circle, inventory=None):
     global user_score
     global game_over
     global knife_added
-
+    global level_color
     # if num == 1:
 
-    myScreen.fill(DARK_RED)
+    myScreen.fill(level_color)
 
     game_over, user_score, knife_added = kA.update(
         user_score, knife_added, inventory)
@@ -288,6 +290,8 @@ def main():
         level_goal = 2
         next_goal = 2
         start_image_index = 0
+        start_transition_index_1 = 178
+        start_transition_index_2 = 0
         myScreen.fill((0, 0, 0))
         kA = KnivesAirbourne(myScreen, circle, level)
         knife_obj = Knife((0, 1), 10)
@@ -319,6 +323,7 @@ def main():
     pSizeX = 30
     pSizeY = 30
 
+    global level_color
     global myScreen
     global high_score
     global kA
@@ -346,10 +351,13 @@ def main():
     running = True
 
     game_start = False
+    level_transition = False
 
     tick = 0
     image_index = 1
     start_image_index = 0
+    start_transition_index_1 = 178
+    start_transition_index_2 = 0
     start_animation = False
     level = 0
     last_score = -1
@@ -407,12 +415,12 @@ def main():
                     name_input += event.unicode
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
-                if game_start:
+                if game_start and not(level_transition):
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
 
-                elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
+                elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60 and not(level_transition):
                     start_animation = True
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
@@ -436,23 +444,58 @@ def main():
         if game_start and not(start_animation) and not(write_name):
 
             if knife_added >= level_goal and next_level:
-                level += 1
-                user_score = 0
-                # next level music
-                mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
-                pygame.mixer.music.load(os.path.join(s, mp3_name))
-                change_music = True
+                level_transition = True
 
-                # this is to reset everything and add new knives and circle
-                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
-                    0, 0), level+3, circle_path)
-                kA = KnivesAirbourne(myScreen, circle, level)
-                knife_obj = Knife((0, 1), 10)
-                kA.add(knife_obj)
-                next_level = True
-                level_goal = min(level + 1, 50)
-                next_goal += level_goal
-                knife_added = 0
+                if level_transition:
+                    if level_color == DARK_RED:
+                        start_transition_index_1 += 1
+
+                        # coz there are 150 pictures for that animation, we wanna stop once we are done with them
+                        if start_transition_index_1 > 336:
+                            level_transition = False
+                            start_transition_index_1 = 178
+    
+                        transition = pygame.image.load(
+                            "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_transition_index_1)).convert_alpha()
+                        transition = pygame.transform.scale(transition, (600, 600))
+                        myScreen.blit(transition, (0, 0))
+                    else:
+                        start_transition_index_2 += 1
+
+                        # coz there are 150 pictures for that animation, we wanna stop once we are done with them
+                        if start_transition_index_2 > 150:
+                            level_transition = False
+                            start_transition_index_2 = 0
+    
+                        transition = pygame.image.load(
+                            "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_transition_index_2)).convert_alpha()
+                        transition = pygame.transform.scale(transition, (600, 600))
+                        myScreen.blit(transition, (0, 0))
+
+                if not(level_transition):
+                    if level_color == DARK_RED:
+                        level_color = NEW_BLACK
+                    else:
+                        level_color = DARK_RED
+                    level += 1
+                    user_score = 0
+                    # next level music
+                    mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
+                    pygame.mixer.music.load(os.path.join(s, mp3_name))
+                    change_music = True
+
+                    # this is to reset everything and add new knives and circle
+                    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
+                        0, 0), level+1, circle_path)
+                    kA = KnivesAirbourne(myScreen, circle, level)
+                    knife_obj = Knife((0, 1), 10)
+                    kA.add(knife_obj)
+                    next_level = True
+                    level_goal = min(level + 1, 50)
+                    next_goal += level_goal
+                    knife_added = 0
+                
+
                 # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
                 continue
