@@ -194,6 +194,8 @@ class KnivesAirbourne(pygame.sprite.Group):
                     game_over = True
                 elif isinstance(collision, Powerup):
                     inventory.add_powerup(collision.power)
+                    score += 1
+                    knife_added += 1
                 else:
                     game_over = False
                     score += 1
