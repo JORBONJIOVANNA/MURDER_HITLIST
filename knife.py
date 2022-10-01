@@ -80,19 +80,16 @@ class Powerup(pygame.sprite.Sprite):
         self.angle = 0
         img = None
         if id == SLOWTIME:
-            img = pygame.image.load("resources/game_icons/slow_inactive.png").convert_alpha()
+            img = pygame.image.load("resources/game_icons/slow_active.png").convert_alpha()
         elif id == SHRINK:
-            img = pygame.image.load("resources/game_icons/shrink_inactive.png").convert_alpha()
+            img = pygame.image.load("resources/game_icons/shrink_active.png").convert_alpha()
         elif id == EXTRALIFE:
-            img = pygame.image.load("resources/game_icons/extra_inactive.png").convert_alpha()
+            img = pygame.image.load("resources/game_icons/extra_active.png").convert_alpha()
         else:
             self.img = None
             self.rect = None
             self.rotated_rect = None
             return
-        dimensions = img.get_size()
-        img = pygame.transform.scale(
-            img, (dimensions[0]/8, dimensions[1]/8))
             
         self.img = pygame.transform.rotate(img, 180)
         self.rect = self.img.get_rect()
@@ -104,7 +101,7 @@ class Powerup(pygame.sprite.Sprite):
         self.rect.y = 400
         self.angle += circle.speed
         new_img, new_rect = rotate(
-            self.img, self.angle, circle.pivot, pygame.math.Vector2(0, 140))
+            self.img, self.angle, circle.pivot, pygame.math.Vector2(0, 120))
         screen.blit(new_img, new_rect)
         self.rotated_rect = new_rect
 
@@ -134,6 +131,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                     if checkifdistance(angles, rand_angle, 10):
                         break
                 obj.angle = rand_angle
+                angles.append(rand_angle)
                 self.add(obj)
                 y+=1
 #            y +=1
@@ -152,6 +150,7 @@ class KnivesAirbourne(pygame.sprite.Group):
     def check_collision(self, knife):
         for entity in self.sprites():
             if type(entity) is Powerup:
+                print(entity.power,entity.rotated_rect.x, entity.rotated_rect.y)
                 if 275 <= entity.rotated_rect.x <= 305 and entity.rotated_rect.y <= 400:
                     return entity
             else:
@@ -188,9 +187,8 @@ class KnivesAirbourne(pygame.sprite.Group):
                 collision = self.check_collision(entity)
                 if collision == -1:
                     game_over = True
-                elif collision ==0:
-                    inventory.add_powerup(collision.id)
-                    pass
+                elif isinstance(collision, Powerup):
+                    inventory.add_powerup(collision.power)
                 else:
                     game_over = False
                     score += 1

@@ -236,6 +236,7 @@ def main():
                 # with this continue keyword
                 continue
             load_level(level,circle,inventory)
+            inventory.update()
 
             # resets game
             if game_over:
