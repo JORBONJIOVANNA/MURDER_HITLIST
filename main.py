@@ -7,7 +7,6 @@ from knife import *
 import os
 import inventory
 
-
 def main():
 
     s = 'sound'

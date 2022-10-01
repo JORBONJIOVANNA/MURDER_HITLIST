@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 
+import random
+
 from utils import rotate
 
 RESTING = 0
@@ -65,6 +67,12 @@ class KnivesAirbourne(pygame.sprite.Group):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
+        number_knives = random.randint(0,4)
+        for x in range(number_knives):
+            knife = Knife((0, 0), 0)
+            knife.state = STUCK
+            knife.stuck_angle = random.randrange(0,360,10)
+            self.add(knife)
 
     def check_collision(self, knife):
         for entity in self.sprites():
