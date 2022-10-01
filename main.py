@@ -3,7 +3,7 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
-from inventory import *
+# from inventory import *
 import random
 
 SCREEN_WIDTH = 600
@@ -187,7 +187,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_level):
     return tick, image_index
 
 
-def load_level(level, circle, inventory):
+def load_level(level, circle, inventory=None):
 
     global user_score
     global game_over
@@ -330,7 +330,7 @@ def main():
                     pygame.math.Vector2(0, 0), 2, circle_path)
 
     kA = KnivesAirbourne(myScreen, circle, level)
-    inventory = Inventory(myScreen)
+    # inventory = Inventory(myScreen)
     knife_obj = Knife((0, 1), 10)
     kA.add(knife_obj)
     customization_screen = False
@@ -418,8 +418,10 @@ def main():
                 # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
                 continue
-            load_level(level, circle, inventory)
-            inventory.update()
+            # load_level(level, circle, inventory)
+            # inventory.update()
+
+            load_level(level, circle)
 
             # resets game
             # resets game
