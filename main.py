@@ -157,9 +157,8 @@ def main():
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
+                        
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
-                    game_start = True
-
                     start_animation = True
 
             elif event.type == pygame.KEYDOWN and game_start:
@@ -200,6 +199,7 @@ def main():
                 user_score = 0
                 game_start = False
                 tick = 0
+                level = 1
                 start_image_index = 0
                 myScreen.fill((0, 0, 0))
                 kA = KnivesAirbourne(myScreen, circle)
@@ -219,6 +219,7 @@ def main():
                 #coz there are 150 pictures for that animation, we wanna stop once we are done with them
                 if start_image_index > 150:
                     start_animation = False
+                    game_start = True
                     change_music = True
                     music = pygame.mixer.music.load(
                         os.path.join(s, 'sound_1.mp3'))

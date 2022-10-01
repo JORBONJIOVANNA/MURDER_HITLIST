@@ -45,13 +45,16 @@ class Knife(pygame.sprite.Sprite):
     def show(self, screen, circle):
         if self.state == MOVING:
             self.move_knife()
+            # print(self.rect.y)
 
         if self.state == STUCK:
+            self.rect.y = 400
             self.stuck_angle += circle.speed
             new_img, new_rect = rotate(
-                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 100))
+                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 140))
             screen.blit(new_img, new_rect)
             self.rotated_rect = new_rect
+            # print(new_rect)
             return
 
         if self.location[1] != self.shoot_location[1]:
@@ -69,7 +72,9 @@ class KnivesAirbourne(pygame.sprite.Group):
     def check_collision(self, knife):
         for entity in self.sprites():
             if entity.state == STUCK and entity != knife:
-                if knife.rect.colliderect(entity.rotated_rect):
+                
+                # checks collision
+                if 280 <= entity.rotated_rect.x <= 300:
                     return -1
                 # return 0
 
