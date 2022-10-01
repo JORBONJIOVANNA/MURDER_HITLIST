@@ -150,7 +150,7 @@ def load_level(level, circle):
 
     # temporary, so after level 1 we add randomness to the circle movement
     # implemented in circle.update()
-    if level > 1:
+    if level > 3:
         circle.show(myScreen, 1)
     else:
         circle.show(myScreen, 0)
@@ -159,12 +159,19 @@ def load_level(level, circle):
         '{}'.format(user_score), True, WHITE)
 
     level_text = small_font.render(
-        'LEVEL {} | {} / {}'.format(level, knife_added, level_goal), True, WHITE)
+        'LEVEL {}'.format(level), True, WHITE)
+
+    pass_info_text = small_font.render(
+        "{}/{}".format(knife_added, level_goal), True, WHITE)
 
     score_rect = score_text.get_rect(
         center=(SCREEN_WIDTH / 2, 80))
     myScreen.blit(score_text, score_rect)
-    myScreen.blit(level_text, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-60))
+    myScreen.blit(level_text, (30, SCREEN_HEIGHT-60))
+
+    pass_info_rect = pass_info_text.get_rect(
+        right=SCREEN_WIDTH - 30, y=SCREEN_HEIGHT - 60)
+    myScreen.blit(pass_info_text, pass_info_rect)
 
 
 def main():
@@ -262,9 +269,8 @@ def main():
 
         if game_start and not(start_animation):
 
-            if user_score >= next_goal and next_level:
+            if knife_added >= level_goal and next_level:
                 level += 1
-                print(user_score, next_level)
 
                 # level 2 music
                 pygame.mixer.music.load(os.path.join(s, 'sound_2.mp3'))
@@ -277,8 +283,8 @@ def main():
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
                 next_level = True
-                level_goal = level + 1
-                next_goal += level + 1
+                level_goal = min(level + 1, 50)
+                next_goal += level_goal
                 knife_added = 0
                 # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
