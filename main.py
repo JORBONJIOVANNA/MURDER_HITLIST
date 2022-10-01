@@ -330,7 +330,7 @@ def main():
         start_transition_index_1 = 178
         start_transition_index_2 = 0
         myScreen.fill((0, 0, 0))
-        kA = KnivesAirbourne(myScreen, circle, level)
+        kA = KnivesAirbourne(myScreen, circle, level,inventory)
         knife_obj = Knife((0, 1), 10)
         kA.add(knife_obj)
         change_music = True
@@ -401,12 +401,13 @@ def main():
     last_score = -1
     next_level = True
     next_goal = 2
-
+    
+    inventory = Inventory(myScreen)
     circle = Circle((200, 200), [300, 300],
                     pygame.math.Vector2(0, 0), 2, circle_path)
 
-    kA = KnivesAirbourne(myScreen, circle, level)
-    inventory = Inventory(myScreen)
+    kA = KnivesAirbourne(myScreen, circle, level,inventory)
+    
     knife_obj = Knife((0, 1), 10)
     kA.add_wrapper(knife_obj)
     customization_screen = False
@@ -563,7 +564,7 @@ def main():
                     # this is to reset everything and add new knives and circle
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+1, circle_path)
-                    kA = KnivesAirbourne(myScreen, circle, level)
+                    kA = KnivesAirbourne(myScreen, circle, level,inventory)
                     knife_obj = Knife((0, 1), 10)
                     kA.add_wrapper((knife_obj))
                     next_level = True

@@ -130,11 +130,13 @@ class KnivesAirbourne(pygame.sprite.Group):
             self.add(knife)
         return angles
 
-    def generate_powerups(self, angles):
+    def generate_powerups(self, angles,inventory):
         chance = random.randrange(0, 100)
         y = 0
         for x in [EXTRALIFE_PERCENTAGE, SLOWTIME_PERCENTAGE,SHRINK_PERCENTAGE]:
             # if chance < x:
+                if inventory.powerups[y] == True:
+                    continue
                 obj = Powerup(y)
 
                 while(True):
@@ -148,12 +150,12 @@ class KnivesAirbourne(pygame.sprite.Group):
                 y+=1
             # y +=1
 
-    def __init__(self, screen, circle, level):
+    def __init__(self, screen, circle, level,inventory):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
         position = self.generate_knives(level)
-        self.generate_powerups(position)
+        self.generate_powerups(position,inventory)
         self.current = None
 
 
@@ -168,7 +170,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 if entity.state == STUCK and entity != knife:
 
                     # checks collision
-                    if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
+                    if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 405:
                         return -1,entity
                     # return 0
         return 1, None
@@ -189,7 +191,7 @@ class KnivesAirbourne(pygame.sprite.Group):
         add_new = True
         is_all_moved = True
 
-        deleted =None
+        deleted = None
 
         for entity in self.sprites():
             # entity.move_knife()
@@ -216,6 +218,8 @@ class KnivesAirbourne(pygame.sprite.Group):
                 else:
                     if isinstance(collision, Powerup):
                         inventory.add_powerup(collision.power)
+                        deleted = collision
+                        self.remove(deleted)
                     else:
                         game_over = False
                     score += 1
