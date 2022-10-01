@@ -52,8 +52,8 @@ class Circle(pygame.sprite.Sprite):
                 self.switch = 0
                 index = rd.randint(0,2)
                 self.speed = speeds[index]
-                
-            self.angle += self.speed
+            if not self.is_slowed:
+                self.angle += self.speed
             self.switch += abs(self.speed)
         else:
             if not self.is_slowed:
