@@ -1,4 +1,5 @@
 
+from distutils.sysconfig import customize_compiler
 import pygame
 from pygame.locals import *
 from circle import Circle
@@ -22,15 +23,18 @@ BLACK = (0, 0, 0)
 high_score = 0
 user_score = 0
 game_over = False
+circle_path = "circle.png"
 
 
 small_font = pygame.font.SysFont('Verdana', 30)
 big_font = pygame.font.SysFont('Verdana', 45)
 game_name = big_font.render('KNIFE HIT', True, LIGHT_GREY)
 start_text = small_font.render('START', True, BLACK)
+customize_text = small_font.render('CUSTOMIZE', True, BLACK)
 
 
-def menu_screen(tick, image_index, myScreen, last_score=-1):
+def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1):
+
     if tick == 5:
         tick = 0
         image_index += 1
@@ -50,16 +54,26 @@ def menu_screen(tick, image_index, myScreen, last_score=-1):
         last_score_text = big_font.render(
             "SCORE: {}".format(last_score), True, LIGHT_GREY)
         myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+    if customization_screen:
 
-    pygame.draw.rect(myScreen, DARK_RED, [
-                     SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
-    myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+        pygame.draw.rect(myScreen, DARK_RED, [
+                        SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
 
-    high_score_text = small_font.render(
-        'HIGH SCORE: {}'.format(high_score), True, BLACK)
-    pygame.draw.rect(myScreen, DARK_RED, [
-                     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
-    myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
+    else:
+        pygame.draw.rect(myScreen, DARK_RED, [
+                        SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+
+        pygame.draw.rect(myScreen, DARK_RED, [
+                        SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
+        myScreen.blit(customize_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
+
+        high_score_text = small_font.render(
+            'HIGH SCORE: {}'.format(high_score), True, BLACK)
+        pygame.draw.rect(myScreen, DARK_RED, [
+                        SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
+        myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
 
 def load_level(level,circle):
@@ -130,11 +144,12 @@ def main():
     last_score = -1
     next_level = True
 
-    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
+    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2,circle_path)
 
     kA = KnivesAirbourne(myScreen, circle,level)
     knife_obj = Knife((0, 1), 10)
     kA.add(knife_obj)
+    customization_screen = False
 
     while running:
         pygame.display.update()
@@ -155,13 +170,17 @@ def main():
                 running = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
+                # print(mouse) 
                 if game_start:
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
-                        
+                 
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     start_animation = True
+
+                elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
+                    customization_screen = True
 
             elif event.type == pygame.KEYDOWN and game_start:
 
@@ -180,7 +199,7 @@ def main():
                 change_music = True
 
                 # this is to reset everything and add new knives and circle
-                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
+                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3,circle_path)
                 kA = KnivesAirbourne(myScreen, circle,level)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
@@ -212,7 +231,7 @@ def main():
                 music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         else:
             tick, image_index = menu_screen(
-                tick, image_index, myScreen, last_score)
+                tick, image_index, myScreen,customization_screen, last_score)
 
             if start_animation:
                 

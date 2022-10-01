@@ -82,7 +82,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.state == STUCK and entity != knife:
                 
                 # checks collision
-                if 275 <= entity.rotated_rect.x <= 305 and entity.rotated_rect.y <= 400:
+                if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                     return -1
                 # return 0
 
