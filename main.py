@@ -40,9 +40,9 @@ circle_2 = pygame.image.load(
     "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
-small_font = pygame.font.SysFont('Verdana', 30)
-big_font = pygame.font.SysFont('Verdana', 45)
-game_name = big_font.render('KNIFE HIT', True, LIGHT_GREY)
+small_font = pygame.font.SysFont('Helvetica', 30)
+big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
+game_name = big_font.render('KNIFE HIT', True, WHITE)
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
 choose_text = small_font.render('CHOOSE', True, BLACK)
@@ -65,11 +65,11 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
 
     if last_score == -1:
-        myScreen.blit(game_name, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+        myScreen.blit(game_name, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-80))
     else:
         last_score_text = big_font.render(
-            "SCORE: {}".format(last_score), True, LIGHT_GREY)
-        myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+            "SCORE: {}".format(last_score), True, WHITE)
+        myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-80))
 
     if customization_screen:
 
@@ -84,13 +84,13 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-90))
 
         myScreen.blit(circle_1, (SCREEN_WIDTH/6, SCREEN_HEIGHT/2))
         myScreen.blit(circle_2, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT/2))
         pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
-        myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150))
+        myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
 
         # pygame.draw.rect(myScreen, DARK_RED, [
         #                 SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
@@ -108,7 +108,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+        myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-90))
 
         customize_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
@@ -117,13 +117,14 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         if customize_rect.collidepoint(mouse_pos):
             customize_text = small_font.render('CUSTOMIZE', True, WHITE)
 
-        myScreen.blit(customize_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
+        myScreen.blit(customize_text, (SCREEN_WIDTH /
+                      3+10, SCREEN_HEIGHT/2 + 10))
 
         high_score_text = small_font.render(
             'HIGH SCORE: {}'.format(high_score), True, BLACK)
         pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
-        myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
+        myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
 
         if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
