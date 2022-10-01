@@ -7,11 +7,16 @@ from knife import *
 import os
 import inventory
 
-pygame.init()
-pygame.mixer.init()
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
+
+pygame.init()
+pygame.mixer.init()
+myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Example 1")
+
+
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -23,14 +28,23 @@ BLACK = (0, 0, 0)
 high_score = 0
 user_score = 0
 game_over = False
-circle_path = "circle.png"
 
+
+circle_1_path = "circle.png"
+circle_2_path = "circle_2.png"
+
+circle_1 = pygame.image.load("resources/{}".format(circle_1_path)).convert_alpha()
+circle_1 = pygame.transform.scale(circle_1, (100, 100))
+
+circle_2 = pygame.image.load("resources/{}".format(circle_2_path)).convert_alpha()
+circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
 small_font = pygame.font.SysFont('Verdana', 30)
 big_font = pygame.font.SysFont('Verdana', 45)
 game_name = big_font.render('KNIFE HIT', True, LIGHT_GREY)
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
+choose_text = small_font.render('CHOOSE', True, BLACK)
 
 
 def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1):
@@ -59,6 +73,16 @@ def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1)
         pygame.draw.rect(myScreen, DARK_RED, [
                         SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
         myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
+
+        myScreen.blit(circle_1,(SCREEN_WIDTH/6,SCREEN_HEIGHT/2))
+        myScreen.blit(circle_2,(SCREEN_WIDTH/2+100,SCREEN_HEIGHT/2))
+        pygame.draw.rect(myScreen, DARK_RED, [
+                        SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+        myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150))
+
+        # pygame.draw.rect(myScreen, DARK_RED, [
+        #                 SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
+        # myScreen.blit(choose_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
 
     else:
         pygame.draw.rect(myScreen, DARK_RED, [
@@ -119,9 +143,8 @@ def main():
     global game_over
     global user_score
 
-    myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Example 1")
 
+    circle_path = circle_1_path
     clock = pygame.time.Clock()
 
     music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
@@ -170,7 +193,6 @@ def main():
                 running = False
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                # print(mouse) 
                 if game_start:
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
@@ -181,7 +203,12 @@ def main():
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
-
+               
+                # if user chooses bowling ball
+                elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
+                    circle_path = circle_2_path
+                    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3,circle_path)
+           
             elif event.type == pygame.KEYDOWN and game_start:
 
                 if event.key == pygame.K_UP:
