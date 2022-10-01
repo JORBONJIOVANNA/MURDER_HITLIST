@@ -1,3 +1,4 @@
+from click import option
 import pygame
 from pygame.locals import *
 from circle import Circle
@@ -31,6 +32,8 @@ score_list = []
 rank = 11
 name_input = ''
 write_name = False
+option_1 = False
+option_2 = False
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
@@ -99,6 +102,8 @@ def insert_name(tick, image_index, myScreen, level):
 
 
 def menu_screen(tick, image_index, myScreen, customization_screen, last_level):
+
+    
     mouse_pos = pygame.mouse.get_pos()
 
     if tick == 5:
@@ -141,13 +146,34 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_level):
 
         myScreen.blit(circle_1, (SCREEN_WIDTH/6, SCREEN_HEIGHT/2))
         myScreen.blit(circle_2, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT/2))
-        pygame.draw.rect(myScreen, DARK_RED, [
+        # print(option_1,option_2)
+        if option_1 or option_2:
+            if option_2:
+                pygame.draw.rect(myScreen, WHITE, [
+                    SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
+            else:
+                pygame.draw.rect(myScreen, DARK_RED, [
+                SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
+            if option_1:
+                pygame.draw.rect(myScreen, WHITE, [
+                    SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
+            else:   
+                pygame.draw.rect(myScreen, DARK_RED, [
+                SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
+        else:
+            pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
-        myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
+            myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
 
-        # pygame.draw.rect(myScreen, DARK_RED, [
-        #                 SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
-        # myScreen.blit(choose_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
+            pygame.draw.rect(myScreen, DARK_RED, [
+                SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
+            myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
+            
+
 
     else:
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
@@ -300,6 +326,8 @@ def main():
     global score_list
     global rank
     global name_input
+    global option_1
+    global option_2
 
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -390,7 +418,15 @@ def main():
 
                 # if user chooses bowling ball
                 elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
+                    option_2 = True
+                    option_1 = False
                     circle_path = circle_2_path
+                    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
+                        0, 0), level+3, circle_path)
+                elif SCREEN_WIDTH/4-60 <= mouse[0] <= SCREEN_WIDTH/2+80 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
+                    option_1 = True
+                    option_2 = False
+                    circle_path = circle_1_path
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+3, circle_path)
 
