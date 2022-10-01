@@ -1,28 +1,62 @@
-from pygame import *
+from knife import SLOWTIME, SHRINK, EXTRALIFE
+import pygame
 
-SLOWTIME = 0
-SHRINK = 1
+SIZE = 0.75
 
 
 class Inventory:
-    def __init__(self, number_knives, inventory):
-        self.number_knives = number_knives
-        self.powerups = [False for x in range(2)]
+    def resize_img(self, img, scale=8):
+        dimensions = img.get_size()
+        img = pygame.transform.scale(
+            img, (dimensions[0]*scale, dimensions[1]*scale))
+        return img
 
-    def add_powerup(self, powerup,index):
+    def __init__(self, screen):
+        self.apples = 0
+        self.screen = screen
+        self.powerups = [False for x in range(3)]
+        slow_img_inactive = pygame.image.load(
+            "resources/game_icons/slow_inactive.png").convert_alpha()
+
+        slow_img_inactive = self.resize_img(slow_img_inactive, SIZE)
+        slow_img_active = pygame.image.load(
+            "resources/game_icons/slow_active.png").convert_alpha()
+        slow_img_active = self.resize_img(slow_img_active, SIZE)
+
+        shrink_img_inactive = pygame.image.load(
+            "resources/game_icons/shrink_inactive.png").convert_alpha()
+        shrink_img_inactive = self.resize_img(shrink_img_inactive, SIZE)
+        shrink_img_active = pygame.image.load(
+            "resources/game_icons/shrink_active.png").convert_alpha()
+        shrink_img_active = self.resize_img(shrink_img_active, SIZE)
+
+        extral_img_inactive = pygame.image.load(
+            "resources/game_icons/extra_inactive.png").convert_alpha()
+        extral_img_inactive = self.resize_img(extral_img_inactive, SIZE)
+
+        extral_img_active = pygame.image.load(
+            "resources/game_icons/extra_active.png").convert_alpha()
+        extral_img_active = self.resize_img(extral_img_active, SIZE)
+
+        self.img = [(slow_img_active, slow_img_inactive), (shrink_img_active,
+                                                           shrink_img_inactive), (extral_img_active, extral_img_inactive)]
+
+    def update(self):
+        for x in range(3):
+            self.screen.blit(
+                self.img[x][0] if self.powerups[x] else self.img[x][1],
+                (420+50*x, 525)
+            )
+
+    def add_powerup(self, index):
+        print(f"added {index}")
         self.powerups[index] = True
-    
-    def use_powerup(self, powerup,index):
+
+    def use_powerup(self, index):
         if self.powerups[index]:
             self.powerups[index] = False
             return True
         return False
 
-    def use_knife(self):
-        if self.number_knives > 0:
-            self.number_knives -=1
-            return True
-        return False
-
-    def set_knives(self,knives):
-        self.number_knives = knives
+    def increment_currency(self):
+        self.apples += 1
