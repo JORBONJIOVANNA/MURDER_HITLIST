@@ -19,6 +19,7 @@ EXTRALIFE_PERCENTAGE = 5
 SLOWTIME_PERCENTAGE = 35
 SHRINK_PERCENTAGE = 35
 
+
 class Vector:
     def __init__(self, pos):
         self.x = pos[0]
@@ -75,24 +76,27 @@ class Knife(pygame.sprite.Sprite):
 
 
 class Powerup(pygame.sprite.Sprite):
-    def __init__(self,id):
+    def __init__(self, id):
         pygame.sprite.Sprite.__init__(self)
         self.power = id
         self.power_time = 7.5
         self.angle = 0
         img = None
         if id == SLOWTIME:
-            img = pygame.image.load("resources/game_icons/slow_active.png").convert_alpha()
+            img = pygame.image.load(
+                "resources/game_icons/slow_active.png").convert_alpha()
         elif id == SHRINK:
-            img = pygame.image.load("resources/game_icons/shrink_active.png").convert_alpha()
+            img = pygame.image.load(
+                "resources/game_icons/shrink_active.png").convert_alpha()
         elif id == EXTRALIFE:
-            img = pygame.image.load("resources/game_icons/extra_active.png").convert_alpha()
+            img = pygame.image.load(
+                "resources/game_icons/extra_active.png").convert_alpha()
         else:
             self.img = None
             self.rect = None
             self.rotated_rect = None
             return
-        
+
         dimensions = img.get_size()
         img = pygame.transform.scale(
             img, (dimensions[0]*0.5, dimensions[1]*0.5))
@@ -102,8 +106,8 @@ class Powerup(pygame.sprite.Sprite):
         self.rotated_rect = None
         ""'level powerups?'""
         # self.power_level = 1
-    
-    def show(self,screen, circle):
+
+    def show(self, screen, circle):
         self.rect.y = 400
         self.angle += circle.speed
         new_img, new_rect = rotate(
@@ -114,26 +118,26 @@ class Powerup(pygame.sprite.Sprite):
 
 class KnivesAirbourne(pygame.sprite.Group):
 
-    def generate_knives(self,number_knives):
+    def generate_knives(self, number_knives):
         angles = []
         for x in range(number_knives):
             knife = Knife((0, 0), 0)
             knife.state = STUCK
-            rand_angle = random.randrange(0,360,30)
+            rand_angle = random.randrange(0, 360, 30)
             knife.stuck_angle = rand_angle
             angles.append(rand_angle)
             self.add(knife)
         return angles
 
-    def generate_powerups(self,angles):
-        chance = random.randrange(0,100)
+    def generate_powerups(self, angles):
+        chance = random.randrange(0, 100)
         y = 0
         for x in [EXTRALIFE_PERCENTAGE, SLOWTIME_PERCENTAGE,SHRINK_PERCENTAGE]:
             # if chance < x:
                 obj = Powerup(y)
-                
+
                 while(True):
-                    rand_angle = random.randrange(0,360,10)
+                    rand_angle = random.randrange(0, 360, 10)
                     if checkifdistance(angles, rand_angle, 10):
                         break
                 obj.angle = rand_angle
@@ -143,9 +147,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 y+=1
             # y +=1
 
-
-    
-    def __init__(self, screen, circle,level):
+    def __init__(self, screen, circle, level):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
@@ -163,7 +165,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                     return entity
             else:
                 if entity.state == STUCK and entity != knife:
-                    
+
                     # checks collision
                     if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                         return -1
@@ -180,7 +182,7 @@ class KnivesAirbourne(pygame.sprite.Group):
         self.current = sprite
         self.add(sprite)
 
-    def update(self, score, knife_added,inventory):
+    def update(self, score, knife_added, inventory=None):
         game_over = False
         add_new = True
         is_all_moved = True
@@ -217,6 +219,6 @@ class KnivesAirbourne(pygame.sprite.Group):
             self.add_wrapper(Knife((0, 1), 10))
 
         return game_over, score, knife_added
-## Make the game score as how many levels beat
-## When a level is over to load next level
-## Top 10 scores <- good
+# Make the game score as how many levels beat
+# When a level is over to load next level
+# Top 10 scores <- good

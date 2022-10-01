@@ -58,7 +58,7 @@ class Inventory:
             self.duration_SLOWTIME += self.clock.get_time()
             if self.duration_SLOWTIME >= SLOWTIME_DURATION:
                 self.duration_SLOWTIME = 0
-                self.is_slowed = False
+                circle.is_slowed = False
                 circle.speed = random.randint(1, circle.raw_speed%12)+1
 
     def add_powerup(self, index):
