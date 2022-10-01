@@ -1,5 +1,3 @@
-
-from distutils.sysconfig import customize_compiler
 import pygame
 from pygame.locals import *
 from circle import Circle
@@ -14,8 +12,7 @@ SCREEN_HEIGHT = 600
 pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Example 1")
-
+pygame.display.set_caption("KNIFE HIT")
 
 
 BLUE = (0, 0, 255)
@@ -29,14 +26,18 @@ high_score = 0
 user_score = 0
 game_over = False
 
+level_goal = 2
+knife_added = 0
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
 
-circle_1 = pygame.image.load("resources/{}".format(circle_1_path)).convert_alpha()
+circle_1 = pygame.image.load(
+    "resources/{}".format(circle_1_path)).convert_alpha()
 circle_1 = pygame.transform.scale(circle_1, (100, 100))
 
-circle_2 = pygame.image.load("resources/{}".format(circle_2_path)).convert_alpha()
+circle_2 = pygame.image.load(
+    "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
 small_font = pygame.font.SysFont('Verdana', 30)
@@ -47,7 +48,8 @@ customize_text = small_font.render('CUSTOMIZE', True, BLACK)
 choose_text = small_font.render('CHOOSE', True, BLACK)
 
 
-def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1):
+def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1):
+    mouse_pos = pygame.mouse.get_pos()
 
     if tick == 5:
         tick = 0
@@ -68,16 +70,26 @@ def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1)
         last_score_text = big_font.render(
             "SCORE: {}".format(last_score), True, LIGHT_GREY)
         myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-90))
+
     if customization_screen:
 
-        pygame.draw.rect(myScreen, DARK_RED, [
-                        SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+        start_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+
+        start_text = small_font.render('START', True, BLACK)
+
+        if start_rect.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+            start_text = small_font.render('START', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
         myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
 
-        myScreen.blit(circle_1,(SCREEN_WIDTH/6,SCREEN_HEIGHT/2))
-        myScreen.blit(circle_2,(SCREEN_WIDTH/2+100,SCREEN_HEIGHT/2))
+        myScreen.blit(circle_1, (SCREEN_WIDTH/6, SCREEN_HEIGHT/2))
+        myScreen.blit(circle_2, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT/2))
         pygame.draw.rect(myScreen, DARK_RED, [
-                        SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+            SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
         myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150))
 
         # pygame.draw.rect(myScreen, DARK_RED, [
@@ -85,46 +97,69 @@ def menu_screen(tick, image_index, myScreen,customization_screen, last_score=-1)
         # myScreen.blit(choose_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
 
     else:
-        pygame.draw.rect(myScreen, DARK_RED, [
-                        SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+        start_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
+
+        start_text = small_font.render('START', True, BLACK)
+
+        if start_rect.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+            start_text = small_font.render('START', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
         myScreen.blit(start_text, (SCREEN_WIDTH/3+50, SCREEN_HEIGHT/2-100))
 
-        pygame.draw.rect(myScreen, DARK_RED, [
-                        SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
+        customize_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
+        customize_text = small_font.render('CUSTOMIZE', True, BLACK)
+
+        if customize_rect.collidepoint(mouse_pos):
+            customize_text = small_font.render('CUSTOMIZE', True, WHITE)
+
         myScreen.blit(customize_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
 
         high_score_text = small_font.render(
             'HIGH SCORE: {}'.format(high_score), True, BLACK)
         pygame.draw.rect(myScreen, DARK_RED, [
-                        SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
+            SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
         myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
+
+        if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
     return tick, image_index
 
-def load_level(level,circle):
-    
+
+def load_level(level, circle):
+
     global user_score
     global game_over
+    global knife_added
 
     # if num == 1:
-    
+
     myScreen.fill(DARK_RED)
 
-    game_over, user_score = kA.update(user_score)
+    game_over, user_score, knife_added = kA.update(user_score, knife_added)
 
     # temporary, so after level 1 we add randomness to the circle movement
     # implemented in circle.update()
     if level > 1:
-        circle.show(myScreen,1)
+        circle.show(myScreen, 1)
     else:
-        circle.show(myScreen,0)
+        circle.show(myScreen, 0)
 
     score_text = small_font.render(
-    'SCORE: {}'.format(user_score), True, BLACK)
+        'SCORE: {}'.format(user_score), True, WHITE)
 
     level_text = small_font.render(
-    'LEVEL {}'.format(level), True, WHITE)
+        'LEVEL {} | {} / {}'.format(level, knife_added, level_goal), True, WHITE)
     myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
     myScreen.blit(level_text, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-60))
+
 
 def main():
 
@@ -142,7 +177,8 @@ def main():
     global kA
     global game_over
     global user_score
-
+    global knife_added
+    global level_goal
 
     circle_path = circle_1_path
     clock = pygame.time.Clock()
@@ -154,7 +190,6 @@ def main():
     knife_effect.set_volume(0.2)
     change_music = False
 
-    
     running = True
 
     game_start = False
@@ -166,10 +201,12 @@ def main():
     level = 1
     last_score = -1
     next_level = True
+    next_goal = 2
 
-    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2,circle_path)
+    circle = Circle((200, 200), [300, 300],
+                    pygame.math.Vector2(0, 0), 2, circle_path)
 
-    kA = KnivesAirbourne(myScreen, circle,level)
+    kA = KnivesAirbourne(myScreen, circle, level)
     knife_obj = Knife((0, 1), 10)
     kA.add(knife_obj)
     customization_screen = False
@@ -197,44 +234,50 @@ def main():
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
-                 
+
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     start_animation = True
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
-               
+
                 # if user chooses bowling ball
                 elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
                     circle_path = circle_2_path
-                    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3,circle_path)
-           
-            elif event.type == pygame.KEYDOWN and game_start:
+                    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
+                        0, 0), level+3, circle_path)
 
-                if event.key == pygame.K_UP:
-                    circle.increase_speed()
-                if event.key == pygame.K_DOWN:
-                    circle.decrease_speed()
+            # elif event.type == pygame.KEYDOWN and game_start:
+
+            #     if event.key == pygame.K_UP:
+            #         circle.increase_speed()
+            #     if event.key == pygame.K_DOWN:
+            #         circle.decrease_speed()
 
         if game_start and not(start_animation):
-            
-            if user_score > 3 and next_level:
-                level += 1
 
-                #level 2 music
+            if user_score >= next_goal and next_level:
+                level += 1
+                print(user_score, next_level)
+
+                # level 2 music
                 pygame.mixer.music.load(os.path.join(s, 'sound_2.mp3'))
                 change_music = True
 
                 # this is to reset everything and add new knives and circle
-                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3,circle_path)
-                kA = KnivesAirbourne(myScreen, circle,level)
+                circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
+                    0, 0), level+3, circle_path)
+                kA = KnivesAirbourne(myScreen, circle, level)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
-                next_level = False
-                # continue coz we need to get rid of the old stuff bu sending it to the pygame.update line
+                next_level = True
+                level_goal = level + 1
+                next_goal += level + 1
+                knife_added = 0
+                # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
                 continue
-            load_level(level,circle)
+            load_level(level, circle)
 
             # resets game
             if game_over:
@@ -248,9 +291,12 @@ def main():
                 game_start = False
                 tick = 0
                 level = 1
+                level_goal = 2
+                next_goal = 2
+                knife_added = 0
                 start_image_index = 0
                 myScreen.fill((0, 0, 0))
-                kA = KnivesAirbourne(myScreen, circle,level)
+                kA = KnivesAirbourne(myScreen, circle, level)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
 
@@ -258,13 +304,13 @@ def main():
                 music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         else:
             tick, image_index = menu_screen(
-                tick, image_index, myScreen,customization_screen, last_score)
+                tick, image_index, myScreen, customization_screen, last_score)
 
             if start_animation:
-                
+
                 start_image_index += 1
 
-                #coz there are 150 pictures for that animation, we wanna stop once we are done with them
+                # coz there are 150 pictures for that animation, we wanna stop once we are done with them
                 if start_image_index > 150:
                     start_animation = False
                     game_start = True
@@ -276,9 +322,6 @@ def main():
                 transition = pygame.transform.scale(transition, (600, 600))
                 myScreen.blit(transition, (0, 0))
 
-                        
-
-        
         tick += 1
      # pygame.display.flip()
 

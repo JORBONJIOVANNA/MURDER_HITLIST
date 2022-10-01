@@ -66,7 +66,7 @@ class Knife(pygame.sprite.Sprite):
 
 
 class KnivesAirbourne(pygame.sprite.Group):
-    def __init__(self, screen, circle,level):
+    def __init__(self, screen, circle, level):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
@@ -74,13 +74,13 @@ class KnivesAirbourne(pygame.sprite.Group):
         for x in range(number_knives):
             knife = Knife((0, 0), 0)
             knife.state = STUCK
-            knife.stuck_angle = random.randrange(0,360,10)
+            knife.stuck_angle = random.randrange(0, 360, 10)
             self.add(knife)
 
     def check_collision(self, knife):
         for entity in self.sprites():
             if entity.state == STUCK and entity != knife:
-                
+
                 # checks collision
                 if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                     return -1
@@ -91,7 +91,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.state == RESTING:
                 entity.state = MOVING
 
-    def update(self, score):
+    def update(self, score, knife_added):
         game_over = False
         add_new = True
         is_all_moved = True
@@ -111,6 +111,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 else:
                     game_over = False
                     score += 1
+                    knife_added += 1
 
         for entity in self.sprites():
             if entity.state == RESTING:
@@ -120,4 +121,4 @@ class KnivesAirbourne(pygame.sprite.Group):
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
 
-        return game_over, score
+        return game_over, score, knife_added
