@@ -267,6 +267,7 @@ def main():
         global knife_added
 
         nonlocal game_start
+        nonlocal customization_screen
         nonlocal tick
         nonlocal start_image_index
         nonlocal level
@@ -279,6 +280,7 @@ def main():
         game_start = False
         game_over = False
         write_name = False
+        customization_screen = False
         knife_added = 0
         name_input = ""
         tick = 0
