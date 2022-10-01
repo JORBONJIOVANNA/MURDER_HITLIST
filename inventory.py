@@ -1,28 +1,25 @@
 from pygame import *
-
-SLOWTIME = 0
-SHRINK = 1
+from knife import SLOWTIME,SHRINK,EXTRALIFE
 
 
 class Inventory:
-    def __init__(self, number_knives, inventory):
-        self.number_knives = number_knives
-        self.powerups = [False for x in range(2)]
+    def __init__(self,screen):
+        self.apples = 0
+        self.screen = screen
+        self.powerups = [False for x in range(3)]
 
-    def add_powerup(self, powerup,index):
+    def update(self):
+        return
+
+    def add_powerup(self,index):
+        print(f"added {index}")
         self.powerups[index] = True
     
-    def use_powerup(self, powerup,index):
+    def use_powerup(self,index):
         if self.powerups[index]:
             self.powerups[index] = False
             return True
         return False
-
-    def use_knife(self):
-        if self.number_knives > 0:
-            self.number_knives -=1
-            return True
-        return False
-
-    def set_knives(self,knives):
-        self.number_knives = knives
+    
+    def increment_currency(self):
+        self.apples += 1

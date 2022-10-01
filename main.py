@@ -4,7 +4,7 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
-import inventory
+from inventory import *
 
 pygame.init()
 pygame.mixer.init()
@@ -62,7 +62,7 @@ def menu_screen(tick, image_index, myScreen, last_score=-1):
     myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-100))
     return tick, image_index
 
-def load_level(level,circle):
+def load_level(level,circle,inventory):
     
     global user_score
     global game_over
@@ -71,7 +71,7 @@ def load_level(level,circle):
     
     myScreen.fill(DARK_RED)
 
-    game_over, user_score = kA.update(user_score)
+    game_over, user_score = kA.update(user_score, inventory)
 
     # temporary, so after level 1 we add randomness to the circle movement
     # implemented in circle.update()
@@ -133,6 +133,7 @@ def main():
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
 
     kA = KnivesAirbourne(myScreen, circle,level)
+    inventory = Inventory(myScreen)
     knife_obj = Knife((0, 1), 10)
     kA.add(knife_obj)
 
@@ -163,12 +164,12 @@ def main():
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     start_animation = True
 
-            elif event.type == pygame.KEYDOWN and game_start:
+            # elif event.type == pygame.KEYDOWN and game_start:
 
-                if event.key == pygame.K_UP:
-                    circle.increase_speed()
-                if event.key == pygame.K_DOWN:
-                    circle.decrease_speed()
+            #     if event.key == pygame.K_UP:
+            #         circle.increase_speed()
+            #     if event.key == pygame.K_DOWN:
+            #         circle.decrease_speed()
 
         if game_start and not(start_animation):
             
@@ -188,7 +189,7 @@ def main():
                 # continue coz we need to get rid of the old stuff bu sending it to the pygame.update line
                 # with this continue keyword
                 continue
-            load_level(level,circle)
+            load_level(level,circle,inventory)
 
             # resets game
             if game_over:
@@ -200,6 +201,7 @@ def main():
                 last_score = user_score
                 user_score = 0
                 game_start = False
+                next_level = True
                 tick = 0
                 level = 1
                 start_image_index = 0
