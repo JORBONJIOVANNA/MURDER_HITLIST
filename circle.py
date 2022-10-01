@@ -2,11 +2,11 @@ import pygame
 import random as rd
 
 class Circle(pygame.sprite.Sprite):
-    def __init__(self, position: tuple[int, int], pivot, offset,speed):
+    def __init__(self, position: tuple[int, int], pivot, offset,speed,path):
         super().__init__()
         self.position = position
 
-        img = pygame.image.load("resources/circle.png").convert_alpha()
+        img = pygame.image.load("resources/{}".format(path)).convert_alpha()
         self.img = pygame.transform.scale(img, (200, 200))
 
         self.rect = self.img.get_rect()
