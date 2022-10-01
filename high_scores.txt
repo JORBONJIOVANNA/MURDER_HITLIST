@@ -2,9 +2,18 @@ yay!,6
 <3,6
 hruday,6
 plus one <3,5
+<<<<<<< HEAD
 <3,4
+=======
+ehab,4
+Ehab,4
+ehab,3
+>>>>>>> customize_fix
 Typing working well,2
 hi,2
 lol,2
 ㅈㅓㄴ전ㅇ,2
+<<<<<<< HEAD
 lol,2
+=======
+>>>>>>> customize_fix
