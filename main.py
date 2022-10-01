@@ -6,6 +6,11 @@ import os
 import inventory
 import random
 
+#Leaderboard variables
+leaderboard = False
+GREEN = (0, 255, 0)
+#Leaderboard variables
+
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
@@ -90,7 +95,7 @@ def insert_name(tick, image_index, myScreen, level):
     return tick, image_index
 
 
-def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1):
+def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, last_score=-1):
     mouse_pos = pygame.mouse.get_pos()
 
     if tick == 5:
@@ -106,16 +111,17 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
     pygame.draw.rect(myScreen, BLACK, [
         SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
 
-    if last_score == -1:
-        game_name_rect = game_name.get_rect(center=(SCREEN_WIDTH/2, 80))
-        myScreen.blit(game_name, game_name_rect)
-    else:
-        last_score_text = big_font.render(
-            "SCORE: {}".format(last_score), True, WHITE)
-        last_score_rect = last_score_text.get_rect(
-            center=(SCREEN_WIDTH/2, 80))
-        myScreen.blit(last_score_text, last_score_rect)
-
+    if not(leaderboard):
+        if last_score == -1:
+            game_name_rect = game_name.get_rect(center=(SCREEN_WIDTH/2, 80))
+            myScreen.blit(game_name, game_name_rect)
+        else:
+            last_score_text = big_font.render(
+                "SCORE: {}".format(last_score), True, WHITE)
+            last_score_rect = last_score_text.get_rect(
+                center=(SCREEN_WIDTH/2, 80))
+            myScreen.blit(last_score_text, last_score_rect)
+    
     if customization_screen:
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
@@ -140,8 +146,39 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         # pygame.draw.rect(myScreen, DARK_RED, [
         #                 SCREEN_WIDTH/3, SCREEN_HEIGHT/2, 200, 40])
         # myScreen.blit(choose_text, (SCREEN_WIDTH/3+10, SCREEN_HEIGHT/2))
+    
+    elif leaderboard:
+        
+        pygame.draw.rect(myScreen, GREY, [SCREEN_WIDTH/4-20, 30, 340, 45])
+        leader_name = big_font.render('LEADERBOARD', True, WHITE)
+        leader_name_rect = leader_name.get_rect(center=(SCREEN_WIDTH/2, 55))
+        myScreen.blit(leader_name, leader_name_rect)
+
+        for i in range (0, len(score_list)):
+            colour = WHITE
+            if(i <= 2):
+                colour = GREEN
+            person = small_font.render(
+                '{} : {}'.format(score_list[i][0], score_list[i][1]), True, colour)
+            pygame.draw.rect(myScreen, DARK_RED, [SCREEN_WIDTH/4, 90+50*i, SCREEN_WIDTH/2, 40])
+            myScreen.blit(person, (SCREEN_WIDTH/3 - 40, 90+50*i))
 
     else:
+        #Leaderboard button
+        leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/3-10, SCREEN_HEIGHT/2-50, 220, 40])
+
+        leader_text = small_font.render('LEADERBOARD', True, BLACK)
+
+        if leader_rect.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+            leader_text = small_font.render('LEADERBOARD', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+        myScreen.blit(leader_text, (SCREEN_WIDTH/3-5, SCREEN_HEIGHT/2-40))
+        #Leaderboard button
+
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
 
@@ -161,6 +198,8 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
 
         if customize_rect.collidepoint(mouse_pos):
             customize_text = small_font.render('CUSTOMIZE', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         myScreen.blit(customize_text, (SCREEN_WIDTH /
                       3+10, SCREEN_HEIGHT/2 + 10))
@@ -279,6 +318,7 @@ def main():
     pSizeX = 30
     pSizeY = 30
 
+    global leaderboard
     global myScreen
     global high_score
     global kA
@@ -373,15 +413,22 @@ def main():
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
+                
+                elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+120 and SCREEN_HEIGHT/2-50 <= mouse[1] <= SCREEN_HEIGHT/2+40:
+                    leaderboard = True
 
                 # if user chooses bowling ball
                 elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
                     circle_path = circle_2_path
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+3, circle_path)
-
+        
+        #If asking for user input for new high score
+        if write_name:
+            tick, image_index = insert_name(tick, image_index, myScreen, level)
+        
         #Playing game part
-        if game_start and not(start_animation) and not(write_name):
+        elif game_start and not(start_animation):
 
             if knife_added >= level_goal and next_level:
                 level += 1
@@ -446,13 +493,10 @@ def main():
                     
                     else:
                         reset_game()
-        #If asking for user input for new high score
-        elif write_name:
-            tick, image_index = insert_name(tick, image_index, myScreen, level)
 
         else:
             tick, image_index = menu_screen(
-                tick, image_index, myScreen, customization_screen, last_score)
+                tick, image_index, myScreen, customization_screen, leaderboard, last_score)
 
             if start_animation:
 
