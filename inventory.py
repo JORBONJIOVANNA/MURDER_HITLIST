@@ -5,7 +5,6 @@ import random
 
 SIZE = 0.75
 
-
 class Inventory:
     def resize_img(self, img, scale=8):
         dimensions = img.get_size()
@@ -18,6 +17,8 @@ class Inventory:
         self.screen = screen
         self.powerups = [False for x in range(3)]
         self.duration_SLOWTIME = 0
+        self.has_shrunk = False
+        self.SHRINKS = MAX_SHRINK_COUNT
         self.clock = pygame.time.Clock()
         slow_img_inactive = pygame.image.load(
             "resources/game_icons/slow_inactive.png").convert_alpha()
@@ -62,7 +63,6 @@ class Inventory:
                 circle.speed = random.randint(1, circle.raw_speed%12)+1
 
     def add_powerup(self, index):
-        print(f"added {index}")
         self.powerups[index] = True
 
     def use_powerup(self, index):

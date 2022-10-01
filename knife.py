@@ -162,14 +162,15 @@ class KnivesAirbourne(pygame.sprite.Group):
                 print(entity.power,entity.rotated_rect.x, entity.rotated_rect.y)
                 # if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                 if 290 <= entity.rotated_rect.x <= 315 and 370 <= entity.rotated_rect.y <= 405:
-                    return entity
+                    return 0,entity
             else:
                 if entity.state == STUCK and entity != knife:
 
                     # checks collision
                     if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
-                        return -1
+                        return -1,entity
                     # return 0
+        return 1, None
 
     def handle_click(self):
         for entity in self.sprites():
@@ -187,6 +188,8 @@ class KnivesAirbourne(pygame.sprite.Group):
         add_new = True
         is_all_moved = True
 
+        deleted =None
+
         for entity in self.sprites():
             # entity.move_knife()
             entity.show(self.screen, self.circle)
@@ -198,15 +201,24 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.location[1] < 400 and entity.state == MOVING:
                 entity.state = STUCK
                 entity.stuck_angle = 0
-                collision = self.check_collision(entity)
-                if collision == -1:
-                    game_over = True
-                elif isinstance(collision, Powerup):
-                    inventory.add_powerup(collision.power)
+                collision_id, collision = self.check_collision(entity)
+                if collision_id == -1:
+                    if (inventory is None):
+                        game_over = True
+                    else:
+                        if not inventory.use_powerup(EXTRALIFE):
+                            game_over = True
+                        else:
+                            deleted = collision
                 else:
-                    game_over = False
-                score += 1
-                knife_added += 1
+                    if isinstance(collision, Powerup):
+                        inventory.add_powerup(collision.power)
+                    else:
+                        game_over = False
+                    score += 1
+                    knife_added += 1
+
+        self.remove(deleted)
 
         for entity in self.sprites():
             if type(entity) is Powerup:

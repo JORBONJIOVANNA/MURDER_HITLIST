@@ -464,7 +464,6 @@ def main():
                         #play noise indicating it can't be used
                         pass
                 elif event.key == pygame.K_a:
-                    print('a')
                     if inventory.use_powerup(SLOWTIME): #inventory.powerups[SLOWTIME]:
                         #use powerup
                         print("slow")
