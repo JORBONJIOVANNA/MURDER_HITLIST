@@ -14,6 +14,10 @@ class Circle(pygame.sprite.Sprite):
         self.rect.x = self.position[0]
         self.rect.y = self.position[1]
 
+        self.is_slowed = False
+
+        self.raw_speed = speed
+
         self.angle = 0
         self.switch = 0
         self.last_angle = 0
@@ -40,7 +44,7 @@ class Circle(pygame.sprite.Sprite):
 
     def update(self,random):
         speeds = [-2,2,4]
-        if random:
+        if random and not self.is_slowed:
             
             # changes after it rotates 60 degrees
             if self.switch > 60:

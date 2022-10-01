@@ -206,6 +206,9 @@ def load_level(level, circle, inventory):
         circle.show(myScreen, 1)
     else:
         circle.show(myScreen, 0)
+    inventory.tick(circle)
+
+    print(inventory.duration_SLOWTIME)
 
     score_text = big_font.render(
         '{}/{}'.format(knife_added, level_goal), True, WHITE)
@@ -332,7 +335,7 @@ def main():
     kA = KnivesAirbourne(myScreen, circle, level)
     inventory = Inventory(myScreen)
     knife_obj = Knife((0, 1), 10)
-    kA.add(knife_obj)
+    kA.add_wrapper(knife_obj)
     customization_screen = False
 
     while running:
@@ -358,30 +361,51 @@ def main():
                 running = False
 
             if event.type == pygame.KEYDOWN and write_name:
-                if event.key == pygame.K_BACKSPACE:
-                    name_input = name_input[:-1]
+                if not game_start:
+                    if event.key == pygame.K_BACKSPACE:
+                        name_input = name_input[:-1]
 
-                elif event.key == pygame.K_RETURN:
+                    elif event.key == pygame.K_RETURN:
 
-                    score_list.insert(rank, (name_input, level))
-                    with open("high_scores.txt", 'w') as w:
-                        for i in range(0, min(10, len(score_list))):
-                            tuple = score_list[i]
-                            rank_i_person = "{},{}\n".format(
-                                tuple[0], tuple[1])
-                            w.write(rank_i_person)
-                    score_list = score_list[0: min(10, len(score_list))]
-                    reset_game()
+                        score_list.insert(rank, (name_input, level))
+                        with open("high_scores.txt", 'w') as w:
+                            for i in range(0, min(10, len(score_list))):
+                                tuple = score_list[i]
+                                rank_i_person = "{},{}\n".format(
+                                    tuple[0], tuple[1])
+                                w.write(rank_i_person)
+                        score_list = score_list[0: min(10, len(score_list))]
+                        reset_game()
 
-                else:
-                    name_input += event.unicode
+                    else:
+                        name_input += event.unicode
+
+            elif event.type == pygame.KEYDOWN and game_start:
+                if event.key == pygame.K_s:
+                    if inventory.powerups[SHRINK]:
+                        #use powerup
+                        pass
+                    else:
+                        #play noise indicating it can't be used
+                        pass
+                elif event.key == pygame.K_a:
+                    print('a')
+                    if inventory.use_powerup(SLOWTIME): #inventory.powerups[SLOWTIME]:
+                        #use powerup
+                        print("slow")
+                        circle.is_slowed = True
+                        circle.speed /= 3
+                        pass
+                    else:
+                        #play noise indicating it can't be used
+                        pass
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
                 if game_start:
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
                         kA.handle_click()
-
+                    
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60:
                     start_animation = True
 
@@ -410,7 +434,7 @@ def main():
                     0, 0), level+3, circle_path)
                 kA = KnivesAirbourne(myScreen, circle, level)
                 knife_obj = Knife((0, 1), 10)
-                kA.add(knife_obj)
+                kA.add_wrapper(knife_obj)
                 next_level = True
                 level_goal = min(level + 1, 50)
                 next_goal += level_goal
