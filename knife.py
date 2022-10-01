@@ -27,14 +27,15 @@ class Vector:
 
 
 class Knife(pygame.sprite.Sprite):
-    def __init__(self, direction, speed):
+    def __init__(self, direction, speed,scale=False):
         pygame.sprite.Sprite.__init__(self)
         self.direction = Vector(direction)
 
         knife = pygame.image.load("resources/sword.png").convert_alpha()
         dimensions = knife.get_size()
+        scaling = 8 if not scale else 16
         knife = pygame.transform.scale(
-            knife, (dimensions[0]/8, dimensions[1]/8))
+            knife, (dimensions[0]/scaling, dimensions[1]/scaling))
         self.img = pygame.transform.rotate(knife, 180)
         self.rect = self.img.get_rect()
         self.rotated_rect = None
@@ -193,8 +194,10 @@ class KnivesAirbourne(pygame.sprite.Group):
         for entity in self.sprites():
             # entity.move_knife()
             entity.show(self.screen, self.circle)
+
             if type(entity) is Powerup:
                 continue
+
             if entity.location[1] > 0 and entity.state != STUCK:
                 add_new = False
 
@@ -228,7 +231,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 break
 
         if add_new and is_all_moved:
-            self.add_wrapper(Knife((0, 1), 10))
+            self.add_wrapper(Knife((0, 1), 10, inventory.has_shrunk and inventory.SHRINKS >0))
 
         return game_over, score, knife_added
 # Make the game score as how many levels beat

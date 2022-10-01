@@ -271,9 +271,7 @@ def load_level(level, circle, inventory=None):
     else:
         circle.show(myScreen, 0)
     inventory.tick(circle)
-
-    print(inventory.duration_SLOWTIME)
-
+    print(inventory.has_shrunk, inventory.SHRINKS)
     score_text = big_font.render(
         '{}/{}'.format(knife_added, level_goal), True, WHITE)
 
@@ -457,7 +455,14 @@ def main():
 
             elif event.type == pygame.KEYDOWN and game_start:
                 if event.key == pygame.K_s:
-                    if inventory.powerups[SHRINK]:
+                    print("s")
+                    if inventory.use_powerup(SHRINK):
+                        if kA.current != None:
+                            inventory.has_shrunk = True
+                            dimensions = kA.current.img.get_size()
+                            kA.current.img = pygame.transform.scale(
+                                kA.current.img, (dimensions[0]*0.5, dimensions[1]*0.5))
+                            inventory.SHRINKS  = MAX_SHRINK_COUNT
                         #use powerup
                         pass
                     else:
@@ -478,6 +483,8 @@ def main():
                 if game_start and not(level_transition):
                     if event.button == 1:  # if left click
                         pygame.mixer.Sound.play(knife_effect)
+                        if inventory.has_shrunk:
+                            inventory.SHRINKS -= 1
                         kA.handle_click()
 
                 elif SCREEN_WIDTH/3+30 <= mouse[0] <= SCREEN_WIDTH/3+170 and SCREEN_HEIGHT/2-100 <= mouse[1] <= SCREEN_HEIGHT/2-60 and not(level_transition):
@@ -514,6 +521,8 @@ def main():
                 level_transition = True
 
                 if level_transition:
+                    inventory.has_shrunk = False
+                    inventory.SHRUNK = MAX_SHRINK_COUNT
                     if level_color == DARK_RED:
                         start_transition_index_1 += 1
 
@@ -556,7 +565,7 @@ def main():
                         0, 0), level+1, circle_path)
                     kA = KnivesAirbourne(myScreen, circle, level)
                     knife_obj = Knife((0, 1), 10)
-                    kA.add(knife_obj)
+                    kA.add_wrapper((knife_obj))
                     next_level = True
                     level_goal = min(level + 1, 50)
                     next_goal += level_goal
@@ -575,6 +584,8 @@ def main():
             # resets game
             if game_over:
                 # Check if potential highscore
+                inventory.has_shrunk = False
+                inventory.SHRUNK = MAX_SHRINK_COUNT
                 if len(score_list) == 0:
                     rank = 0
                     activate_name_screen()
