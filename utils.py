@@ -17,3 +17,10 @@ def rotate(surface, angle, pivot, offset):
     # Add the offset vector to the center/pivot point to shift the rect.
     rect = rotated_image.get_rect(center=pivot+rotated_offset)
     return rotated_image, rect  # Return the rotated image and shifted rect.
+
+
+def checkifdistance(ls,angle,distance):
+    for x in ls:
+        if abs(x - angle) < distance:
+            return False
+    return True
