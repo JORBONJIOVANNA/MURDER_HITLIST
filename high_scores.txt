@@ -1,1 +1,6 @@
-13
+hruday,6
+Typing working well,2
+hruday markondapatnaikuni,2
+rank4,1
+rank3,1
+rank6,3

@@ -151,13 +151,13 @@ class KnivesAirbourne(pygame.sprite.Group):
         for entity in self.sprites():
             if type(entity) is Powerup:
                 print(entity.power,entity.rotated_rect.x, entity.rotated_rect.y)
-                if 275 <= entity.rotated_rect.x <= 305 and entity.rotated_rect.y <= 400:
+                if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                     return entity
             else:
                 if entity.state == STUCK and entity != knife:
                     
                     # checks collision
-                    if 275 <= entity.rotated_rect.x <= 305 and entity.rotated_rect.y <= 400:
+                    if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                         return -1
                     # return 0
 
@@ -168,7 +168,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.state == RESTING:
                 entity.state = MOVING
 
-    def update(self, score,inventory):
+    def update(self, score, knife_added,inventory):
         game_over = False
         add_new = True
         is_all_moved = True
@@ -192,6 +192,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                 else:
                     game_over = False
                     score += 1
+                    knife_added += 1
 
         for entity in self.sprites():
             if type(entity) is Powerup:
@@ -203,4 +204,7 @@ class KnivesAirbourne(pygame.sprite.Group):
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
 
-        return game_over, score
+        return game_over, score, knife_added
+## Make the game score as how many levels beat
+## When a level is over to load next level
+## Top 10 scores <- good
