@@ -3,7 +3,6 @@ from pygame.locals import *
 from circle import Circle
 from knife import *
 import os
-import inventory
 
 
 SCREEN_WIDTH = 600
@@ -65,11 +64,14 @@ def menu_screen(tick, image_index, myScreen, customization_screen, last_score=-1
         SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
 
     if last_score == -1:
-        myScreen.blit(game_name, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-80))
+        game_name_rect = game_name.get_rect(center=(SCREEN_WIDTH/2, 80))
+        myScreen.blit(game_name, game_name_rect)
     else:
         last_score_text = big_font.render(
             "SCORE: {}".format(last_score), True, WHITE)
-        myScreen.blit(last_score_text, (SCREEN_WIDTH/4+30, SCREEN_HEIGHT/4-80))
+        last_score_rect = last_score_text.get_rect(
+            center=(SCREEN_WIDTH/2, 80))
+        myScreen.blit(last_score_text, last_score_rect)
 
     if customization_screen:
 
@@ -153,12 +155,15 @@ def load_level(level, circle):
     else:
         circle.show(myScreen, 0)
 
-    score_text = small_font.render(
-        'SCORE: {}'.format(user_score), True, WHITE)
+    score_text = big_font.render(
+        '{}'.format(user_score), True, WHITE)
 
     level_text = small_font.render(
         'LEVEL {} | {} / {}'.format(level, knife_added, level_goal), True, WHITE)
-    myScreen.blit(score_text, (SCREEN_WIDTH/3+20, SCREEN_HEIGHT/4-100))
+
+    score_rect = score_text.get_rect(
+        center=(SCREEN_WIDTH / 2, 80))
+    myScreen.blit(score_text, score_rect)
     myScreen.blit(level_text, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-60))
 
 
