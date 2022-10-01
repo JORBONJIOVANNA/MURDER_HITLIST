@@ -155,14 +155,13 @@ class KnivesAirbourne(pygame.sprite.Group):
     def check_collision(self, knife):
         for entity in self.sprites():
             if type(entity) is Powerup:
-                print(entity.power,entity.rotated_rect.x, entity.rotated_rect.y)
                 if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                     return entity
             else:
                 if entity.state == STUCK and entity != knife:
                     
                     # checks collision
-                    if 300 <= entity.rotated_rect.x <= 310 and 370 <= entity.rotated_rect.y <= 405:
+                    if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
                         return -1
                     # return 0
 
