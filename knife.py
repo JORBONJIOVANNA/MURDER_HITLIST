@@ -66,11 +66,11 @@ class Knife(pygame.sprite.Sprite):
 
 
 class KnivesAirbourne(pygame.sprite.Group):
-    def __init__(self, screen, circle):
+    def __init__(self, screen, circle,level):
         pygame.sprite.Group.__init__(self)
         self.screen = screen
         self.circle = circle
-        number_knives = random.randint(0,4)
+        number_knives = level
         for x in range(number_knives):
             knife = Knife((0, 0), 0)
             knife.state = STUCK

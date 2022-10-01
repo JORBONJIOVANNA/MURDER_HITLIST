@@ -117,11 +117,7 @@ def main():
     knife_effect.set_volume(0.2)
     change_music = False
 
-    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
-
-    kA = KnivesAirbourne(myScreen, circle)
-    knife_obj = Knife((0, 1), 10)
-    kA.add(knife_obj)
+    
     running = True
 
     game_start = False
@@ -133,6 +129,12 @@ def main():
     level = 1
     last_score = -1
     next_level = True
+
+    circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
+
+    kA = KnivesAirbourne(myScreen, circle,level)
+    knife_obj = Knife((0, 1), 10)
+    kA.add(knife_obj)
 
     while running:
         pygame.display.update()
@@ -179,7 +181,7 @@ def main():
 
                 # this is to reset everything and add new knives and circle
                 circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),level+3)
-                kA = KnivesAirbourne(myScreen, circle)
+                kA = KnivesAirbourne(myScreen, circle,level)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
                 next_level = False
@@ -202,7 +204,7 @@ def main():
                 level = 1
                 start_image_index = 0
                 myScreen.fill((0, 0, 0))
-                kA = KnivesAirbourne(myScreen, circle)
+                kA = KnivesAirbourne(myScreen, circle,level)
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
 
