@@ -133,8 +133,8 @@ def main():
     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(0, 0),2)
 
     kA = KnivesAirbourne(myScreen, circle,level)
-    knife_obj = Knife((0, 1), 10)
-    kA.add(knife_obj)
+    #knife_obj = Knife((0, 1), 10)
+    #kA.add(knife_obj)
 
     while running:
         pygame.display.update()
@@ -185,9 +185,10 @@ def main():
                 knife_obj = Knife((0, 1), 10)
                 kA.add(knife_obj)
                 next_level = False
-                # continue coz we need to get rid of the old stuff bu sending it to the pygame.update line
+                # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
                 continue
+
             load_level(level,circle)
 
             # resets game
@@ -205,8 +206,8 @@ def main():
                 start_image_index = 0
                 myScreen.fill((0, 0, 0))
                 kA = KnivesAirbourne(myScreen, circle,level)
-                knife_obj = Knife((0, 1), 10)
-                kA.add(knife_obj)
+                #knife_obj = Knife((0, 1), 10)
+                #kA.add(knife_obj)
 
                 change_music = True
                 music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
@@ -229,9 +230,6 @@ def main():
                     "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_image_index)).convert_alpha()
                 transition = pygame.transform.scale(transition, (600, 600))
                 myScreen.blit(transition, (0, 0))
-
-                        
-
         
         tick += 1
      # pygame.display.flip()
