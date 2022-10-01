@@ -47,13 +47,16 @@ class Knife(pygame.sprite.Sprite):
     def show(self, screen, circle):
         if self.state == MOVING:
             self.move_knife()
+            # print(self.rect.y)
 
         if self.state == STUCK:
+            self.rect.y = 400
             self.stuck_angle += circle.speed
             new_img, new_rect = rotate(
-                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 100))
+                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 140))
             screen.blit(new_img, new_rect)
             self.rotated_rect = new_rect
+            # print(new_rect)
             return
 
         if self.location[1] != self.shoot_location[1]:
@@ -77,15 +80,19 @@ class KnivesAirbourne(pygame.sprite.Group):
     def check_collision(self, knife):
         for entity in self.sprites():
             if entity.state == STUCK and entity != knife:
-                if knife.rect.colliderect(entity.rotated_rect):
-                    print("LOSER")
+                
+                # checks collision
+                if 280 <= entity.rotated_rect.x <= 300:
+                    return -1
+                # return 0
 
     def handle_click(self):
         for entity in self.sprites():
             if entity.state == RESTING:
                 entity.state = MOVING
 
-    def update(self):
+    def update(self, score):
+        game_over = False
         add_new = True
         is_all_moved = True
 
@@ -99,7 +106,11 @@ class KnivesAirbourne(pygame.sprite.Group):
             if entity.location[1] < 400 and entity.state == MOVING:
                 entity.state = STUCK
                 entity.stuck_angle = 0
-                self.check_collision(entity)
+                if self.check_collision(entity) == -1:
+                    game_over = True
+                else:
+                    game_over = False
+                    score += 1
 
         for entity in self.sprites():
             if entity.state == RESTING:
@@ -108,3 +119,5 @@ class KnivesAirbourne(pygame.sprite.Group):
 
         if add_new and is_all_moved:
             self.add(Knife((0, 1), 10))
+
+        return game_over, score
