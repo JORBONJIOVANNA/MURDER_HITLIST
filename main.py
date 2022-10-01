@@ -43,8 +43,8 @@ circle_2 = pygame.image.load(
     "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
-smallest_font = pygame.font.SysFont('Helvetica', 30)
-small_font = pygame.font.SysFont('Helvetica', 30)
+smallest_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 27)
+small_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
 game_name = big_font.render('KNIFE HIT', True, WHITE)
 
@@ -56,9 +56,12 @@ choose_text = small_font.render('CHOOSE', True, BLACK)
 def insert_name(tick, image_index, myScreen, level):
     global name_input
     global rank
-    
+    global smallest_font
+    global SCREEN_HEIGHT
+    global SCREEN_WIDTH
+
     #Rendering    
-    if tick == 5:
+    if tick%6 == 5:
         tick = 0
         image_index += 1
         if image_index > 11:
@@ -68,10 +71,12 @@ def insert_name(tick, image_index, myScreen, level):
         menu_img = pygame.transform.scale(menu_img, (600, 600))
         myScreen.blit(menu_img, (0, 0))
 
-    success_message_1 = smallest_font.render('Well done Murderer! You reached level {} which is rank {}!'.format(level, rank+1), True, WHITE)
-    success_message_2 = smallest_font.render('Please enter your name to go on Serial Killer List', True, WHITE)
-    myScreen.blit(success_message_1, (15, SCREEN_HEIGHT/3-60))
-    myScreen.blit(success_message_2, (50, SCREEN_HEIGHT/3-40))
+    success_message_1 = smallest_font.render('Well done Murderer!', True, WHITE)
+    success_message_2 = smallest_font.render('You reached level {} which is rank {}!'.format(level, rank+1), True, WHITE)
+    success_message_3 = smallest_font.render('Please enter your name to go on Serial Killer List:', True, WHITE)
+    myScreen.blit(success_message_1, (SCREEN_WIDTH/3 - 20, SCREEN_HEIGHT/3-100))
+    myScreen.blit(success_message_2, (SCREEN_HEIGHT/4 - 30, SCREEN_HEIGHT/3-70))
+    myScreen.blit(success_message_3, (50, SCREEN_HEIGHT/3-40))
 
     pygame.draw.rect(myScreen, DARK_RED, [SCREEN_WIDTH/4, SCREEN_HEIGHT/2-100, SCREEN_WIDTH/2, 40])
 
@@ -80,7 +85,7 @@ def insert_name(tick, image_index, myScreen, level):
     else:
         name_output = smallest_font.render(name_input + "|", True, WHITE)
     
-    myScreen.blit(name_output, (SCREEN_WIDTH/4+10, SCREEN_HEIGHT/3+10))
+    myScreen.blit(name_output, (SCREEN_WIDTH/4+5, SCREEN_HEIGHT/3+5))
 
     return tick, image_index
 
@@ -212,7 +217,8 @@ def load_level(level, circle):
 
 
 def main():
-    #Helper functions for main() functions
+    #Helper functions for main() function -v
+    ####################################################################################
     def reset_game():
         global myScreen
         global high_score
@@ -235,9 +241,12 @@ def main():
         game_start = False
         game_over = False
         write_name = False
+        knife_added = 0
         name_input = ""
         tick = 0
         level = 1
+        level_goal = 2
+        next_goal = 2
         start_image_index = 0
         myScreen.fill((0, 0, 0))
         kA = KnivesAirbourne(myScreen, circle,level)
@@ -258,6 +267,8 @@ def main():
         game_over = True
         music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         write_name = True
+    ####################################################################################
+    #Helper functions for main() functions -^
 
     s = 'sound'
     # SCREEN_WIDTH = 600
@@ -271,12 +282,16 @@ def main():
     global myScreen
     global high_score
     global kA
-    global game_over
     global user_score
-
+    global knife_added
+    global level_goal
+    global score_list
+    global rank
+    global name_input
+    
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Example 1")
 
+    circle_path = circle_1_path
     clock = pygame.time.Clock()
 
     music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
@@ -366,7 +381,7 @@ def main():
                         0, 0), level+3, circle_path)
 
         #Playing game part
-        if game_start and not(start_animation) and and not(write_name):
+        if game_start and not(start_animation) and not(write_name):
 
             if knife_added >= level_goal and next_level:
                 level += 1
@@ -408,13 +423,16 @@ def main():
 
                 elif len(score_list) > 1:
                     found_rank = False
-                    for i in range(0, min(9, len(score_list)-1)):
-                        if(level <= score_list[i][1] and level >= score_list[i+1][1]):
-                            rank = i+1
-                            found_rank = True
-                            break
-                        else:
-                            rank = 11
+                    if score_list[0][1] <= level:
+                        rank = 0
+                    else:
+                        for i in range(1, min(9, len(score_list)-1)):
+                            if(level <= score_list[i][1] and level >= score_list[i+1][1]):
+                                rank = i+1
+                                found_rank = True
+                                break
+                            else:
+                                rank = 11
 
                     if(len(score_list) == 10 and score_list[-1][1] == level):
                         reset_game()
@@ -429,8 +447,8 @@ def main():
                     else:
                         reset_game()
         #If asking for user input for new high score
-        """elif write_name:
-            tick, image_index = insert_name(tick, image_index, myScreen, level)"""
+        elif write_name:
+            tick, image_index = insert_name(tick, image_index, myScreen, level)
 
         else:
             tick, image_index = menu_screen(
