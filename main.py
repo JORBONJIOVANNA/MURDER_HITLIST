@@ -1,4 +1,3 @@
-from click import option
 import pygame
 from pygame.locals import *
 from circle import Circle
