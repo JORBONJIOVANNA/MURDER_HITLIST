@@ -1,9 +1,15 @@
-# GameJam2022
+<img src="resources/murdererhitlistlogo.png"
+     alt="Markdown Monster icon"
+     style="float: left; margin-right: 10px;" width='200px' height='200px'/>
+
+# Murderer Histlist
 
 Inspired by an arcade classic featuring a dark and moody palette inspired by Sydney's atrocious weather.  
 
 A simple game where you shoot knives by clicking on the screen. Make sure you do not hit two knives on the same spot or ELSE...
-Hit power-ups to help you reach higher levels. Each level requires you to hit a certain number of knives on the target to proceed to the next level.  
+Hit power-ups to help you reach higher levels. Each level requires you to hit a certain number of knives on the target to proceed to the next level.   
+
+You can also customise your target from the Customise menu :)
 
 
 
