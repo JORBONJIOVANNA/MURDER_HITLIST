@@ -7,6 +7,9 @@ import os
 from inventory import *
 import random
 
+
+s = 'sound'
+
 #Leaderboard variables
 leaderboard = False
 GREEN = (0, 255, 0)
@@ -41,6 +44,8 @@ name_input = ''
 write_name = False
 option_1 = False
 option_2 = False
+change_music = False
+done = False
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
@@ -125,6 +130,9 @@ def insert_name(tick, image_index, myScreen, level):
 
 def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, last_level):
 
+    global change_music
+    global done
+    global s
     mouse_pos = pygame.mouse.get_pos()
 
     if tick == 5:
@@ -163,6 +171,11 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(back_text, (SCREEN_WIDTH /
                       6-80, SCREEN_HEIGHT/6-60))
     if customization_screen:
+        
+        # if change_music == False and done == False:
+        #     pygame.mixer.music.load(os.path.join(s, 'customize.mp3'))
+        #     change_music = True
+        #     done = True
         
         pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 80, 340, 45])
         customize_name = big_font.render('CHANGE TARGET', True, WHITE)
@@ -212,7 +225,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
     
     elif leaderboard:
-        
         pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 30, 340, 45])
         leader_name = big_font.render('LEADERBOARD', True, WHITE)
         leader_name_rect = leader_name.get_rect(center=(SCREEN_WIDTH/2, 55))
@@ -245,6 +257,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             myScreen.blit(second_line, second_line_rect)
 
     else:
+        done = False
         #Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
@@ -358,6 +371,8 @@ def main():
         global name_input
         global level_goal
         global knife_added
+        global s
+        
 
         nonlocal game_start
         nonlocal customization_screen
@@ -365,7 +380,6 @@ def main():
         nonlocal start_image_index
         nonlocal level
         nonlocal last_score
-        nonlocal change_music
         nonlocal music
 
         last_score = level
@@ -392,7 +406,6 @@ def main():
         global myScreen
         global game_over
         global write_name
-        nonlocal change_music
         nonlocal music
 
         myScreen.fill((0, 0, 0))
@@ -401,7 +414,7 @@ def main():
     ####################################################################################
     # Helper functions for main() functions -^
 
-    s = 'sound'
+    
     # SCREEN_WIDTH = 600
     # SCREEN_HEIGHT = 600
 
@@ -423,6 +436,8 @@ def main():
     global name_input
     global option_1
     global option_2
+    global change_music
+    
 
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -434,7 +449,7 @@ def main():
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(0.1)
     knife_effect.set_volume(0.2)
-    change_music = False
+    
 
     running = True
 
@@ -474,6 +489,7 @@ def main():
         #         high_score = 0
 
         if change_music:
+            print(123)
             pygame.mixer.music.play(-1)
             change_music = False
 
@@ -544,10 +560,14 @@ def main():
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
+                    pygame.mixer.music.load(os.path.join(s, 'customize.mp3'))
+                    change_music = True
                 
                 elif SCREEN_WIDTH/4-20 <= mouse[0] <= SCREEN_WIDTH/3+340 and SCREEN_HEIGHT/2-50 <= mouse[1] <= SCREEN_HEIGHT/2-5:
                     leaderboard = True
                 elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-70 <= mouse[1] <= SCREEN_HEIGHT/2-30:
+                    pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                    change_music = True
                     leaderboard = False
                     customization_screen = False
 
@@ -611,9 +631,9 @@ def main():
                     level += 1
                     user_score = 0
                     # next level music
-                    # mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
-                    # pygame.mixer.music.load(os.path.join(s, mp3_name))
-                    # change_music = True
+                    mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
+                    pygame.mixer.music.load(os.path.join(s, mp3_name))
+                    change_music = True
 
                     # this is to reset everything and add new knives and circle
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
