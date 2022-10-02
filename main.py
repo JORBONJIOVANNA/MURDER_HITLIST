@@ -22,6 +22,8 @@ pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("MURDERER HITLIST")
+logo_img = pygame.image.load('resources/murdererhitlistlogo.png')
+pygame.display.set_icon(logo_img)
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -84,7 +86,6 @@ customize_text = small_font.render('CUSTOMIZE', True, BLACK)
 choose_text = small_font.render('CHOOSE', True, BLACK)
 
 # When game asks for user input, this is purely rendering the screen
-
 
 def insert_name(tick, image_index, myScreen, level):
     global name_input
@@ -192,7 +193,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
 
         myScreen.blit(circle_1, (SCREEN_WIDTH/6, SCREEN_HEIGHT/2))
         myScreen.blit(circle_2, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT/2))
-        # print(option_1,option_2)
         if option_1 or option_2:
             if option_2:
                 pygame.draw.rect(myScreen, WHITE, [
@@ -247,7 +247,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         if len(score_list) != 0:
             myScreen.blit(knife, (SCREEN_WIDTH-200, SCREEN_HEIGHT/2-160))
         else:
-            # pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, SCREEN_HEIGHT/2, 340, 45])
             first_line = small_font.render('WE HAVE BEEN WAITING', True, WHITE)
             first_line_rect = first_line.get_rect(
                 center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
@@ -259,7 +258,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
 
     else:
         done = False
-        #Leaderboard button
         # Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
@@ -298,12 +296,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(customize_text, (SCREEN_WIDTH /
                       3+10, SCREEN_HEIGHT/2 + 10))
 
-        # high_score_text = small_font.render(
-        #     'HIGH SCORE: {}'.format(high_score), True, BLACK)
-        # pygame.draw.rect(myScreen, DARK_RED, [
-        #     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
-        # myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
-
         if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos) or leader_rect.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
@@ -323,7 +315,6 @@ def load_level(level, circle, inventory=None):
     global game_over
     global knife_added
     global level_color
-    # if num == 1:
 
     myScreen.fill(level_color)
 
@@ -344,17 +335,10 @@ def load_level(level, circle, inventory=None):
     level_text = small_font.render(
         'LEVEL {}'.format(level), True, WHITE)
 
-    # pass_info_text = small_font.render(
-    #     "{}/{}".format(knife_added, level_goal), True, WHITE)
-
     score_rect = score_text.get_rect(
         center=(SCREEN_WIDTH / 2, 80))
     myScreen.blit(score_text, score_rect)
     myScreen.blit(level_text, (30, SCREEN_HEIGHT-60))
-
-    # pass_info_rect = pass_info_text.get_rect(
-    #     right=SCREEN_WIDTH - 30, y=SCREEN_HEIGHT - 60)
-    # myScreen.blit(pass_info_text, pass_info_rect)
 
 
 def main():
@@ -415,10 +399,6 @@ def main():
     ####################################################################################
     # Helper functions for main() functions -^
 
-    
-    # SCREEN_WIDTH = 600
-    # SCREEN_HEIGHT = 600
-
     FPS = 60
 
     pSizeX = 30
@@ -457,10 +437,10 @@ def main():
     power_get_sounds[SHRINK].set_volume(0.7)
     power_get_sounds[EXTRALIFE].set_volume(0.7)
 
-    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.mp3')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
-    power_use_sounds[SLOWTIME].set_volume(1)
-    power_use_sounds[SHRINK].set_volume(0.6)
-    power_use_sounds[EXTRALIFE].set_volume(0.7)
+    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.wav')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
+    power_use_sounds[SLOWTIME].set_volume(0.6)
+    power_use_sounds[SHRINK].set_volume(0.45)
+    power_use_sounds[EXTRALIFE].set_volume(0.6)
 
     change_music = False
 
@@ -492,17 +472,8 @@ def main():
 
     while running:
         pygame.display.update()
-        # get high score
-        # with open("high_scores.txt", 'r+') as w:
-        #     try:
-        #         line = w.readline().split(",")
-        #         high_score = int(line[1])
-
-        #     except:
-        #         high_score = 0
 
         if change_music:
-            print(123)
             pygame.mixer.music.play(-1)
             change_music = False
 
@@ -545,10 +516,6 @@ def main():
                                 kA.current.img, (dimensions[0]*0.5, dimensions[1]*0.5))
                             inventory.SHRINKS = MAX_SHRINK_COUNT
                         # use powerup
-                        pass
-                    else:
-                        # play noise indicating it can't be used
-                        pass
                 elif event.key == pygame.K_a:
                     # inventory.powerups[SLOWTIME]:
                     if inventory.use_powerup(SLOWTIME):
@@ -556,10 +523,6 @@ def main():
                         print("slow")
                         circle.is_slowed = True
                         circle.speed /= 3
-                        pass
-                    else:
-                        # play noise indicating it can't be used
-                        pass
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
                 if game_start and not(level_transition):
@@ -575,6 +538,7 @@ def main():
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
                     pygame.mixer.music.load(os.path.join(s, 'customize.mp3'))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
                 
 
@@ -582,6 +546,7 @@ def main():
                     leaderboard = True
                 elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-70 <= mouse[1] <= SCREEN_HEIGHT/2-30:
                     pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
                     leaderboard = False
                     customization_screen = False
@@ -650,6 +615,7 @@ def main():
                     # next level music
                     mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
                     pygame.mixer.music.load(os.path.join(s, mp3_name))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
 
                     # this is to reset everything and add new knives and circle
@@ -675,6 +641,7 @@ def main():
             # resets game
             if game_over:
                 pygame.mixer.music.load(os.path.join(s, 'game_over.mp3'))
+                pygame.mixer.music.set_volume(0.2)
                 change_music = True
                 game_start = False
                 last_level = level
@@ -747,5 +714,7 @@ if __name__ == '__main__':
     with open("high_scores.txt", 'r') as hs:
         for line in hs.readlines():
             cur_line = line.strip().rsplit(',', 1)
+            if len(cur_line) < 2:
+                break
             score_list.append((cur_line[0], int(cur_line[1])))
     main()
