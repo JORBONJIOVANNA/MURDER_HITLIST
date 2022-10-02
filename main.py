@@ -233,8 +233,16 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                 '{} : {}'.format(score_list[i][0], score_list[i][1]), True, colour)
             pygame.draw.rect(myScreen, bg_color, [SCREEN_WIDTH/4, 160+70*i, SCREEN_WIDTH/2, 40])
             myScreen.blit(person, (SCREEN_WIDTH/3 - 40, 170+70*i))
-        
-        myScreen.blit(knife,(SCREEN_WIDTH-200,SCREEN_HEIGHT/2-160))
+        if len(score_list) != 0:
+            myScreen.blit(knife,(SCREEN_WIDTH-200,SCREEN_HEIGHT/2-160))
+        else:
+            # pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, SCREEN_HEIGHT/2, 340, 45])
+            first_line = small_font.render('WE HAVE BEEN WAITING', True, WHITE)
+            first_line_rect = first_line.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+            myScreen.blit(first_line, first_line_rect)
+            second_line = small_font.render('FOR YOU', True, WHITE)
+            second_line_rect = second_line.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+60))
+            myScreen.blit(second_line, second_line_rect)
 
     else:
         #Leaderboard button
