@@ -22,6 +22,8 @@ pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("MURDERER HITLIST")
+logo_img = pygame.image.load('resources/murdererhitlistlogo.png')
+pygame.display.set_icon(logo_img)
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -87,7 +89,6 @@ choose_text = small_font.render('CHOOSE', True, BLACK)
 
 
 # When game asks for user input, this is purely rendering the screen
-
 
 def insert_name(tick, image_index, myScreen, level):
     global name_input
@@ -195,7 +196,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
 
         myScreen.blit(circle_1, (SCREEN_WIDTH/6, SCREEN_HEIGHT/2))
         myScreen.blit(circle_2, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT/2))
-        # print(option_1,option_2)
         if option_1 or option_2:
             if option_2:
                 pygame.draw.rect(myScreen, WHITE, [
@@ -250,7 +250,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         if len(score_list) != 0:
             myScreen.blit(knife, (SCREEN_WIDTH-200, SCREEN_HEIGHT/2-160))
         else:
-            # pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, SCREEN_HEIGHT/2, 340, 45])
             first_line = small_font.render('WE HAVE BEEN WAITING', True, WHITE)
             first_line_rect = first_line.get_rect(
                 center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
@@ -265,7 +264,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
 
     else:
         done = False
-        #Leaderboard button
         # Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
@@ -305,7 +303,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                       3+10, SCREEN_HEIGHT/2 + 10))
 
         help_rect = pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/3, SCREEN_HEIGHT/2+90, 175, 40])
+            SCREEN_WIDTH/3, SCREEN_HEIGHT/2+50, 175, 40])
         help_text = small_font.render('HELP', True, BLACK)
 
         if help_rect.collidepoint(mouse_pos):
@@ -314,7 +312,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         myScreen.blit(help_text, (SCREEN_WIDTH /
-                      3+10, SCREEN_HEIGHT/2 + 110))
+                      3+10, SCREEN_HEIGHT/2 + 50))
 
         # high_score_text = small_font.render(
         #     'HIGH SCORE: {}'.format(high_score), True, BLACK)
@@ -341,7 +339,6 @@ def load_level(level, circle, inventory=None):
     global game_over
     global knife_added
     global level_color
-    # if num == 1:
 
     myScreen.fill(level_color)
 
@@ -362,17 +359,10 @@ def load_level(level, circle, inventory=None):
     level_text = small_font.render(
         'LEVEL {}'.format(level), True, WHITE)
 
-    # pass_info_text = small_font.render(
-    #     "{}/{}".format(knife_added, level_goal), True, WHITE)
-
     score_rect = score_text.get_rect(
         center=(SCREEN_WIDTH / 2, 80))
     myScreen.blit(score_text, score_rect)
     myScreen.blit(level_text, (30, SCREEN_HEIGHT-60))
-
-    # pass_info_rect = pass_info_text.get_rect(
-    #     right=SCREEN_WIDTH - 30, y=SCREEN_HEIGHT - 60)
-    # myScreen.blit(pass_info_text, pass_info_rect)
 
 
 def main():
@@ -432,10 +422,6 @@ def main():
         write_name = True
     ####################################################################################
     # Helper functions for main() functions -^
-
-    
-    # SCREEN_WIDTH = 600
-    # SCREEN_HEIGHT = 600
 
     FPS = 60
 
@@ -511,17 +497,8 @@ def main():
 
     while running:
         pygame.display.update()
-        # get high score
-        # with open("high_scores.txt", 'r+') as w:
-        #     try:
-        #         line = w.readline().split(",")
-        #         high_score = int(line[1])
-
-        #     except:
-        #         high_score = 0
 
         if change_music:
-            print(123)
             pygame.mixer.music.play(-1)
             change_music = False
 
