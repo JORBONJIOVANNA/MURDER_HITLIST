@@ -47,6 +47,7 @@ option_2 = False
 change_music = False
 done = False
 last_level = 0
+help_screen = False
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
@@ -81,7 +82,9 @@ game_name = big_font.render('MURDERER HITLIST', True, WHITE)
 
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
+help_text = small_font.render('HELP', True, BLACK)
 choose_text = small_font.render('CHOOSE', True, BLACK)
+
 
 # When game asks for user input, this is purely rendering the screen
 
@@ -129,7 +132,7 @@ def insert_name(tick, image_index, myScreen, level):
     return tick, image_index
 
 
-def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, last_level):
+def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, last_level,help_screen):
 
     global change_music
     global done
@@ -257,6 +260,9 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                 center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+60))
             myScreen.blit(second_line, second_line_rect)
 
+    elif help_screen:
+        pass
+
     else:
         done = False
         #Leaderboard button
@@ -297,6 +303,18 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
 
         myScreen.blit(customize_text, (SCREEN_WIDTH /
                       3+10, SCREEN_HEIGHT/2 + 10))
+
+        help_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/3, SCREEN_HEIGHT/2+90, 175, 40])
+        help_text = small_font.render('HELP', True, BLACK)
+
+        if help_rect.collidepoint(mouse_pos):
+            help_text = small_font.render('HELP', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+        myScreen.blit(help_text, (SCREEN_WIDTH /
+                      3+10, SCREEN_HEIGHT/2 + 110))
 
         # high_score_text = small_font.render(
         #     'HIGH SCORE: {}'.format(high_score), True, BLACK)
@@ -425,6 +443,7 @@ def main():
     pSizeY = 30
 
     global leaderboard
+    global help_screen
     global level_color
     global myScreen
     global high_score
@@ -579,6 +598,8 @@ def main():
                     change_music = True
                     leaderboard = False
                     customization_screen = False
+                elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-100 <= mouse[1] <= SCREEN_HEIGHT/2-100:
+                    pass
 
                 # if user chooses bowling ball
                 elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
@@ -715,7 +736,7 @@ def main():
 
         else:
             tick, image_index = menu_screen(
-                tick, image_index, myScreen, customization_screen, leaderboard, last_level)
+                tick, image_index, myScreen, customization_screen, leaderboard, last_level,help_screen)
 
             if start_animation:
 
