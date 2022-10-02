@@ -41,6 +41,7 @@ name_input = ''
 write_name = False
 option_1 = False
 option_2 = False
+last_level = 1
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
@@ -361,6 +362,7 @@ def main():
         global name_input
         global level_goal
         global knife_added
+        global last_level
 
         nonlocal game_start
         nonlocal customization_screen
@@ -380,6 +382,7 @@ def main():
         knife_added = 0
         name_input = ""
         tick = 0
+        last_level = level
         level = 1
         level_goal = 2
         next_goal = 2
@@ -426,6 +429,7 @@ def main():
     global name_input
     global option_1
     global option_2
+    global last_level
 
     myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -646,6 +650,7 @@ def main():
                 pygame.mixer.music.load(os.path.join(s, 'game_over.mp3'))
                 change_music = True
                 game_start = False
+                last_level = level
                 # Check if potential highscore
                 inventory.reset()
                 if len(score_list) == 0:
@@ -687,7 +692,7 @@ def main():
 
         else:
             tick, image_index = menu_screen(
-                tick, image_index, myScreen, customization_screen, leaderboard, level)
+                tick, image_index, myScreen, customization_screen, leaderboard, last_level)
 
             if start_animation:
 
