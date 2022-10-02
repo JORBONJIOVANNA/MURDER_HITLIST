@@ -20,5 +20,5 @@ Game Over Sound: https://opengameart.org/content/death-is-just-another-path
 Customize Screen Sound: https://opengameart.org/content/epic-man-of-death-commercial  
 
 Ball_1: https://en.m.wikipedia.org/wiki/File:Black_and_Red_Circle.png  
-Ball_2: https://pngimg.com/image/24350
+Ball_2: https://pngimg.com/image/24350     
 Sword: https://opengameart.org/content/sword-0 
