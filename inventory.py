@@ -73,3 +73,9 @@ class Inventory:
 
     def increment_currency(self):
         self.apples += 1
+
+    def reset(self):
+        self.has_shrunk = False
+        self.SHRINKS = MAX_SHRINK_COUNT
+        self.powerups = [False for x in range(3)]
+        self.duration_SLOWTIME = 0

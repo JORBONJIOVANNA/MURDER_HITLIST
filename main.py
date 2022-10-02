@@ -271,7 +271,7 @@ def load_level(level, circle, inventory=None):
     else:
         circle.show(myScreen, 0)
     inventory.tick(circle)
-    print(inventory.has_shrunk, inventory.SHRINKS)
+
     score_text = big_font.render(
         '{}/{}'.format(knife_added, level_goal), True, WHITE)
 
@@ -584,8 +584,7 @@ def main():
             # resets game
             if game_over:
                 # Check if potential highscore
-                inventory.has_shrunk = False
-                inventory.SHRUNK = MAX_SHRINK_COUNT
+                inventory.reset()
                 if len(score_list) == 0:
                     rank = 0
                     activate_name_screen()
