@@ -211,7 +211,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
     else:
         #Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/3-10, SCREEN_HEIGHT/2-50, 220, 40])
+            SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
 
         leader_text = small_font.render('LEADERBOARD', True, BLACK)
 
@@ -221,7 +221,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-        myScreen.blit(leader_text, (SCREEN_WIDTH/3-5, SCREEN_HEIGHT/2-40))
+        myScreen.blit(leader_text, (SCREEN_WIDTH/3-13, SCREEN_HEIGHT/2-40))
         #Leaderboard button
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
