@@ -40,7 +40,7 @@ name_input = ''
 write_name = False
 option_1 = False
 option_2 = False
-last_level = 1
+last_level = 0
 
 circle_1_path = "circle.png"
 circle_2_path = "circle_2.png"
