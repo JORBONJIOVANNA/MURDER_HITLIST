@@ -2,7 +2,7 @@
      alt="Markdown Monster icon"
      style="float: left; margin-right: 10px;" width='200px' height='200px'/>
 
-# Murderer Histlist
+# Murderer Hitlist
 
 Inspired by an arcade classic featuring a dark and moody palette inspired by Sydney's atrocious weather.  
 
