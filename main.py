@@ -387,8 +387,6 @@ def main():
         kA = KnivesAirbourne(myScreen, circle, level,inventory)
         knife_obj = Knife((0, 1), 10)
         kA.add(knife_obj)
-        change_music = True
-        music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
 
     def activate_name_screen():
         global myScreen
@@ -398,9 +396,7 @@ def main():
         nonlocal music
 
         myScreen.fill((0, 0, 0))
-        change_music = True
         game_over = True
-        music = pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
         write_name = True
     ####################################################################################
     # Helper functions for main() functions -^
