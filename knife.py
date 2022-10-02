@@ -133,21 +133,22 @@ class KnivesAirbourne(pygame.sprite.Group):
         chance = random.randrange(0, 100)
         y = 0
         for x in [EXTRALIFE_PERCENTAGE, SLOWTIME_PERCENTAGE,SHRINK_PERCENTAGE]:
-            # if chance < x:
+            if chance < x:
                 if inventory.powerups[y] == True:
                     continue
                 obj = Powerup(y)
 
                 while(True):
-                    rand_angle = random.randrange(0, 360, 10)
-                    if checkifdistance(angles, rand_angle, 10):
+                    rand_angle = random.randrange(0, 360, 15)
+                    if checkifdistance(angles, rand_angle, 15):
                         break
                 obj.angle = rand_angle
                 angles.append(rand_angle)
                 self.add(obj)
-                # break
-                y+=1
-            # y +=1
+                break
+                # y+=1
+            chance = random.randrange(0, 100)
+            y +=1
 
     def __init__(self, screen, circle, level,inventory):
         pygame.sprite.Group.__init__(self)

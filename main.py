@@ -54,11 +54,11 @@ circle_2 = pygame.image.load(
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
 powerup_1 = pygame.image.load(
-                "resources/game_icons/slow_active.png").convert_alpha()
+                "resources/game_icons/slow_menu.png").convert_alpha()
 powerup_1 = pygame.transform.scale(powerup_1, (75, 75))
 
 powerup_2 = pygame.image.load(
-                "resources/game_icons/shrink_active.png").convert_alpha()
+                "resources/game_icons/shrink_menu.png").convert_alpha()
 powerup_2 = pygame.transform.scale(powerup_2, (75, 75))
 
 powerup_3 = pygame.image.load(
