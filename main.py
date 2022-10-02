@@ -743,5 +743,7 @@ if __name__ == '__main__':
     with open("high_scores.txt", 'r') as hs:
         for line in hs.readlines():
             cur_line = line.strip().rsplit(',', 1)
+            if len(cur_line) < 2:
+                break
             score_list.append((cur_line[0], int(cur_line[1])))
     main()
