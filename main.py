@@ -18,7 +18,7 @@ SCREEN_HEIGHT = 600
 pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("KNIFE HIT")
+pygame.display.set_caption("MURDERER HITLIST")
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -68,7 +68,7 @@ powerup_3 = pygame.transform.scale(powerup_3, (75, 75))
 smallest_font = pygame.font.SysFont('Helvetica', 27)
 small_font = pygame.font.SysFont('Helvetica', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
-game_name = big_font.render('KNIFE HIT', True, WHITE)
+game_name = big_font.render('MURDERER HITLIST', True, WHITE)
 
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
