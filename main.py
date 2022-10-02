@@ -302,9 +302,25 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         # powerups on menu
-        myScreen.blit(powerup_1, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-100))
-        myScreen.blit(powerup_2, (SCREEN_WIDTH/2-30, SCREEN_HEIGHT-100))
-        myScreen.blit(powerup_3, (SCREEN_WIDTH-120, SCREEN_HEIGHT-100))
+
+        smaller_font = pygame.font.SysFont('Helvetica', 12)
+        myScreen.blit(powerup_1, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-150))
+        slow_text1 = smaller_font.render('SLOW DOWN TIME', True, WHITE)
+        slow_text2 = smaller_font.render('FOR 5 SECONDS', True, WHITE)
+        myScreen.blit(slow_text1, (SCREEN_WIDTH /5 -60, SCREEN_HEIGHT- 75))
+        myScreen.blit(slow_text2, (SCREEN_WIDTH /5 -60, SCREEN_HEIGHT- 55))
+        myScreen.blit(powerup_2, (SCREEN_WIDTH/2-30, SCREEN_HEIGHT-150))
+        shrink_text1 = smaller_font.render('SHRINK UP TO', True, WHITE)
+        shrink_text2 = smaller_font.render('3 SWORDS', True, WHITE)
+        myScreen.blit(shrink_text1, (SCREEN_WIDTH /2 -30, SCREEN_HEIGHT - 75))
+        myScreen.blit(shrink_text2, (SCREEN_WIDTH /2 -30, SCREEN_HEIGHT- 55))
+        myScreen.blit(powerup_3, (SCREEN_WIDTH-120, SCREEN_HEIGHT-150))
+        extralife_text1 = smaller_font.render('GRANTS ANOTHER', True, WHITE)
+        extralife_text2 = smaller_font.render('CHANCE INSTEAD', True, WHITE)
+        extralife_text3 = smaller_font.render('OF GETTING A GAME OVER', True, WHITE)
+        myScreen.blit(extralife_text1, (SCREEN_WIDTH-140, SCREEN_HEIGHT - 75))
+        myScreen.blit(extralife_text2, (SCREEN_WIDTH-140, SCREEN_HEIGHT - 55))
+        myScreen.blit(extralife_text3, (SCREEN_WIDTH-160, SCREEN_HEIGHT - 35))
 
     return tick, image_index
 
