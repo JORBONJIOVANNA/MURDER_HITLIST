@@ -33,6 +33,7 @@ class Knife(pygame.sprite.Sprite):
 
         knife = pygame.image.load("resources/sword.png").convert_alpha()
         dimensions = knife.get_size()
+        self.scale = scale
         scaling = 8 if not scale else 16
         knife = pygame.transform.scale(
             knife, (dimensions[0]/scaling, dimensions[1]/scaling))
@@ -63,8 +64,9 @@ class Knife(pygame.sprite.Sprite):
         if self.state == STUCK:
             self.rect.y = 400
             self.stuck_angle += circle.speed
+            offset = 140 if not self.scale else 120
             new_img, new_rect = rotate(
-                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 140))
+                self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, offset))
             screen.blit(new_img, new_rect)
             self.rotated_rect = new_rect
             return
@@ -84,10 +86,10 @@ class Powerup(pygame.sprite.Sprite):
         img = None
         if id == SLOWTIME:
             img = pygame.image.load(
-                "resources/game_icons/slow_active.png").convert_alpha()
+                "resources/game_icons/slow_menu.png").convert_alpha()
         elif id == SHRINK:
             img = pygame.image.load(
-                "resources/game_icons/shrink_active.png").convert_alpha()
+                "resources/game_icons/shrink_menu.png").convert_alpha()
         elif id == EXTRALIFE:
             img = pygame.image.load(
                 "resources/game_icons/extra_active.png").convert_alpha()
@@ -164,7 +166,7 @@ class KnivesAirbourne(pygame.sprite.Group):
             if type(entity) is Powerup:
                 print(entity.power,entity.rotated_rect.x, entity.rotated_rect.y)
                 # if 275 <= entity.rotated_rect.x <= 305 and 370 <= entity.rotated_rect.y <= 400:
-                if 290 <= entity.rotated_rect.x <= 315 and 370 <= entity.rotated_rect.y <= 405:
+                if 275 <= entity.rotated_rect.x <= 315 and 370 <= entity.rotated_rect.y <= 405:
                     return 0,entity
             else:
                 if entity.state == STUCK and entity != knife:

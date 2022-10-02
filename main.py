@@ -479,6 +479,7 @@ def main():
                         if kA.current != None:
                             inventory.has_shrunk = True
                             dimensions = kA.current.img.get_size()
+                            kA.current.scale = True
                             kA.current.img = pygame.transform.scale(
                                 kA.current.img, (dimensions[0]*0.5, dimensions[1]*0.5))
                             inventory.SHRINKS  = MAX_SHRINK_COUNT
