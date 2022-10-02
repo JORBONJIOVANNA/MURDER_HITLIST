@@ -65,6 +65,9 @@ powerup_3 = pygame.image.load(
                 "resources/game_icons/extra_active.png").convert_alpha()
 powerup_3 = pygame.transform.scale(powerup_3, (75, 75))
 
+knife = pygame.image.load("resources/sword.png").convert_alpha()
+knife = pygame.transform.scale(knife, (50, 75))
+
 smallest_font = pygame.font.SysFont('Helvetica', 27)
 small_font = pygame.font.SysFont('Helvetica', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
@@ -134,10 +137,8 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         menu_img = pygame.transform.scale(menu_img, (600, 600))
         myScreen.blit(menu_img, (0, 0))
 
-    pygame.draw.rect(myScreen, BLACK, [
-        SCREEN_WIDTH/4, SCREEN_HEIGHT/4-90, 300, 60])
 
-    if not(leaderboard):
+    if not(leaderboard) and not(customization_screen):
         if last_level == 0:
             game_name_rect = game_name.get_rect(center=(SCREEN_WIDTH/2, 80))
             myScreen.blit(game_name, game_name_rect)
@@ -148,7 +149,25 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                 center=(SCREEN_WIDTH/2, 80))
             myScreen.blit(last_level_text, last_level_rect)
 
+    #back button
+    if customization_screen or leaderboard:
+        back_rect = pygame.draw.rect(myScreen, DARK_RED, [
+            SCREEN_WIDTH/6-80, SCREEN_HEIGHT/6-70, 80, 40])
+        back_text = smallest_font.render('BACK', True, BLACK)
+
+        if back_rect.collidepoint(mouse_pos):
+            back_text = smallest_font.render('BACK', True, WHITE)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+        myScreen.blit(back_text, (SCREEN_WIDTH /
+                      6-80, SCREEN_HEIGHT/6-60))
     if customization_screen:
+        
+        pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 80, 340, 45])
+        customize_name = big_font.render('CHANGE TARGET', True, WHITE)
+        customize_name_rect = customize_name.get_rect(center=(SCREEN_WIDTH/2, 90))
+        myScreen.blit(customize_name, customize_name_rect)
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
@@ -194,19 +213,28 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
     
     elif leaderboard:
         
-        pygame.draw.rect(myScreen, GREY, [SCREEN_WIDTH/4-20, 30, 340, 45])
-        leader_name = big_font.render('LEADERBOARD', True, BLACK)
+        pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 30, 340, 45])
+        leader_name = big_font.render('LEADERBOARD', True, WHITE)
         leader_name_rect = leader_name.get_rect(center=(SCREEN_WIDTH/2, 55))
         myScreen.blit(leader_name, leader_name_rect)
+        
 
         for i in range (0, len(score_list)):
-            colour = WHITE
+
+            # only top 5
+            if i == 5:
+                break
+            colour = BLACK
+            bg_color = DARK_RED
             if(i == 0):
-                colour = GREEN
+                colour = DARK_RED
+                bg_color = GREY
             person = small_font.render(
                 '{} : {}'.format(score_list[i][0], score_list[i][1]), True, colour)
-            pygame.draw.rect(myScreen, DARK_RED, [SCREEN_WIDTH/4, 90+50*i, SCREEN_WIDTH/2, 40])
-            myScreen.blit(person, (SCREEN_WIDTH/3 - 40, 90+50*i))
+            pygame.draw.rect(myScreen, bg_color, [SCREEN_WIDTH/4, 160+70*i, SCREEN_WIDTH/2, 40])
+            myScreen.blit(person, (SCREEN_WIDTH/3 - 40, 170+70*i))
+        
+        myScreen.blit(knife,(SCREEN_WIDTH-200,SCREEN_HEIGHT/2-160))
 
     else:
         #Leaderboard button
@@ -513,8 +541,11 @@ def main():
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
                 
-                elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+120 and SCREEN_HEIGHT/2-50 <= mouse[1] <= SCREEN_HEIGHT/2+40:
+                elif SCREEN_WIDTH/4-20 <= mouse[0] <= SCREEN_WIDTH/3+340 and SCREEN_HEIGHT/2-50 <= mouse[1] <= SCREEN_HEIGHT/2-5:
                     leaderboard = True
+                elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-70 <= mouse[1] <= SCREEN_HEIGHT/2-30:
+                    leaderboard = False
+                    customization_screen = False
 
                 # if user chooses bowling ball
                 elif SCREEN_WIDTH/2+100 <= mouse[0] <= SCREEN_WIDTH/2+240 and SCREEN_HEIGHT-150 <= mouse[1] <= SCREEN_HEIGHT-110 and customization_screen:
