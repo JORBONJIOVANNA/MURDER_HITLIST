@@ -53,6 +53,18 @@ circle_2 = pygame.image.load(
     "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
+powerup_1 = pygame.image.load(
+                "resources/game_icons/slow_active.png").convert_alpha()
+powerup_1 = pygame.transform.scale(powerup_1, (75, 75))
+
+powerup_2 = pygame.image.load(
+                "resources/game_icons/shrink_active.png").convert_alpha()
+powerup_2 = pygame.transform.scale(powerup_2, (75, 75))
+
+powerup_3 = pygame.image.load(
+                "resources/game_icons/extra_active.png").convert_alpha()
+powerup_3 = pygame.transform.scale(powerup_3, (75, 75))
+
 smallest_font = pygame.font.SysFont('Helvetica', 27)
 small_font = pygame.font.SysFont('Helvetica', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
@@ -247,6 +259,12 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+        # powerups on menu
+        myScreen.blit(powerup_1, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-100))
+        myScreen.blit(powerup_2, (SCREEN_WIDTH/2-30, SCREEN_HEIGHT-100))
+        myScreen.blit(powerup_3, (SCREEN_WIDTH-120, SCREEN_HEIGHT-100))
+
 
     return tick, image_index
 
