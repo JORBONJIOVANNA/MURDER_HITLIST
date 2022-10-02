@@ -446,10 +446,10 @@ def main():
     power_get_sounds[SHRINK].set_volume(0.7)
     power_get_sounds[EXTRALIFE].set_volume(0.7)
 
-    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.mp3')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
-    power_use_sounds[SLOWTIME].set_volume(1)
-    power_use_sounds[SHRINK].set_volume(0.6)
-    power_use_sounds[EXTRALIFE].set_volume(0.7)
+    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.wav')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
+    power_use_sounds[SLOWTIME].set_volume(0.6)
+    power_use_sounds[SHRINK].set_volume(0.45)
+    power_use_sounds[EXTRALIFE].set_volume(0.6)
 
     change_music = False
 
@@ -533,10 +533,6 @@ def main():
                                 kA.current.img, (dimensions[0]*0.5, dimensions[1]*0.5))
                             inventory.SHRINKS = MAX_SHRINK_COUNT
                         # use powerup
-                        pass
-                    else:
-                        # play noise indicating it can't be used
-                        pass
                 elif event.key == pygame.K_a:
                     # inventory.powerups[SLOWTIME]:
                     if inventory.use_powerup(SLOWTIME):
@@ -544,10 +540,6 @@ def main():
                         print("slow")
                         circle.is_slowed = True
                         circle.speed /= 3
-                        pass
-                    else:
-                        # play noise indicating it can't be used
-                        pass
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
                 if game_start and not(level_transition):
