@@ -642,6 +642,9 @@ def main():
             # resets game
             # resets game
             if game_over:
+                pygame.mixer.music.load(os.path.join(s, 'game_over.mp3'))
+                change_music = True
+                game_start = False
                 # Check if potential highscore
                 inventory.reset()
                 if len(score_list) == 0:
