@@ -1,8 +1,2 @@
-m,5
-naur,4
-k,3
-,,2
-Ehab,2
-Ehab,1
-Ehab,1
-Ehab,1
+HUHUE,3
+JADJjda,2

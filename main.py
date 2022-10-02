@@ -575,6 +575,7 @@ def main():
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
                     pygame.mixer.music.load(os.path.join(s, 'customize.mp3'))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
                 
 
@@ -582,6 +583,7 @@ def main():
                     leaderboard = True
                 elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-70 <= mouse[1] <= SCREEN_HEIGHT/2-30:
                     pygame.mixer.music.load(os.path.join(s, 'menu.mp3'))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
                     leaderboard = False
                     customization_screen = False
@@ -650,6 +652,7 @@ def main():
                     # next level music
                     mp3_name = "sound_" + str(random.randint(1, 2)) + ".mp3"
                     pygame.mixer.music.load(os.path.join(s, mp3_name))
+                    pygame.mixer.music.set_volume(0.1)
                     change_music = True
 
                     # this is to reset everything and add new knives and circle
@@ -675,6 +678,7 @@ def main():
             # resets game
             if game_over:
                 pygame.mixer.music.load(os.path.join(s, 'game_over.mp3'))
+                pygame.mixer.music.set_volume(0.2)
                 change_music = True
                 game_start = False
                 last_level = level
