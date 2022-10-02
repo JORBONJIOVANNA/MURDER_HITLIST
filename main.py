@@ -22,6 +22,8 @@ pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("MURDERER HITLIST")
+logo_img = pygame.image.load('resources/murdererhitlistlogo.png')
+pygame.display.set_icon(logo_img)
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
