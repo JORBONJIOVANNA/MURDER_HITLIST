@@ -22,7 +22,7 @@ class Circle(pygame.sprite.Sprite):
         self.switch = 0
         self.last_angle = 0
         lower_bound = max(1,speed)
-        self.speed = rd.randint(lower_bound, speed%12)+1
+        self.speed = rd.randint(lower_bound, speed%12)
         self.num = rd.randint(0, speed%10)+3
         self.pivot = pivot
         self.offset = offset

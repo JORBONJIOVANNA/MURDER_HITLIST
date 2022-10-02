@@ -18,7 +18,7 @@ SCREEN_HEIGHT = 600
 pygame.init()
 pygame.mixer.init()
 myScreen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("KNIFE HIT")
+pygame.display.set_caption("MURDERER HITLIST")
 
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
@@ -53,10 +53,22 @@ circle_2 = pygame.image.load(
     "resources/{}".format(circle_2_path)).convert_alpha()
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
+powerup_1 = pygame.image.load(
+                "resources/game_icons/slow_active.png").convert_alpha()
+powerup_1 = pygame.transform.scale(powerup_1, (75, 75))
+
+powerup_2 = pygame.image.load(
+                "resources/game_icons/shrink_active.png").convert_alpha()
+powerup_2 = pygame.transform.scale(powerup_2, (75, 75))
+
+powerup_3 = pygame.image.load(
+                "resources/game_icons/extra_active.png").convert_alpha()
+powerup_3 = pygame.transform.scale(powerup_3, (75, 75))
+
 smallest_font = pygame.font.SysFont('Helvetica', 27)
 small_font = pygame.font.SysFont('Helvetica', 30)
 big_font = pygame.font.Font('fonts/PPEditorialNew-Ultralight.otf', 45)
-game_name = big_font.render('KNIFE HIT', True, WHITE)
+game_name = big_font.render('MURDERER HITLIST', True, WHITE)
 
 start_text = small_font.render('START', True, BLACK)
 customize_text = small_font.render('CUSTOMIZE', True, BLACK)
@@ -199,7 +211,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
     else:
         #Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/3-10, SCREEN_HEIGHT/2-50, 220, 40])
+            SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
 
         leader_text = small_font.render('LEADERBOARD', True, BLACK)
 
@@ -209,7 +221,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
-        myScreen.blit(leader_text, (SCREEN_WIDTH/3-5, SCREEN_HEIGHT/2-40))
+        myScreen.blit(leader_text, (SCREEN_WIDTH/3-13, SCREEN_HEIGHT/2-40))
         #Leaderboard button
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
@@ -237,16 +249,22 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(customize_text, (SCREEN_WIDTH /
                       3+10, SCREEN_HEIGHT/2 + 10))
 
-        high_score_text = small_font.render(
-            'HIGH SCORE: {}'.format(high_score), True, BLACK)
-        pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
-        myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
+        # high_score_text = small_font.render(
+        #     'HIGH SCORE: {}'.format(high_score), True, BLACK)
+        # pygame.draw.rect(myScreen, DARK_RED, [
+        #     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
+        # myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
 
         if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+
+        # powerups on menu
+        myScreen.blit(powerup_1, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-100))
+        myScreen.blit(powerup_2, (SCREEN_WIDTH/2-30, SCREEN_HEIGHT-100))
+        myScreen.blit(powerup_3, (SCREEN_WIDTH-120, SCREEN_HEIGHT-100))
+
 
     return tick, image_index
 
@@ -330,7 +348,7 @@ def main():
         start_transition_index_1 = 178
         start_transition_index_2 = 0
         myScreen.fill((0, 0, 0))
-        kA = KnivesAirbourne(myScreen, circle, level)
+        kA = KnivesAirbourne(myScreen, circle, level,inventory)
         knife_obj = Knife((0, 1), 10)
         kA.add(knife_obj)
         change_music = True
@@ -402,11 +420,12 @@ def main():
     next_level = True
     next_goal = 2
 
+    inventory = Inventory(myScreen)
     circle = Circle((200, 200), [300, 300],
                     pygame.math.Vector2(0, 0), 2, circle_path)
 
-    kA = KnivesAirbourne(myScreen, circle, level)
-    inventory = Inventory(myScreen)
+    kA = KnivesAirbourne(myScreen, circle, level,inventory)
+    
     knife_obj = Knife((0, 1), 10)
     kA.add_wrapper(knife_obj)
     customization_screen = False
@@ -414,13 +433,13 @@ def main():
     while running:
         pygame.display.update()
         # get high score
-        with open("high_scores.txt", 'r+') as w:
-            try:
-                line = w.readline().split(",")
-                high_score = int(line[1])
+        # with open("high_scores.txt", 'r+') as w:
+        #     try:
+        #         line = w.readline().split(",")
+        #         high_score = int(line[1])
 
-            except:
-                high_score = 0
+        #     except:
+        #         high_score = 0
 
         if change_music:
             pygame.mixer.music.play(-1)
@@ -563,7 +582,7 @@ def main():
                     # this is to reset everything and add new knives and circle
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+1, circle_path)
-                    kA = KnivesAirbourne(myScreen, circle, level)
+                    kA = KnivesAirbourne(myScreen, circle, level,inventory)
                     knife_obj = Knife((0, 1), 10)
                     kA.add_wrapper((knife_obj))
                     next_level = True
