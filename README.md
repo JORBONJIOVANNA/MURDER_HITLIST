@@ -11,11 +11,14 @@ This game only requires PyGame to be installed and can be run by using the comma
 
 The background music was downloaded from 'https://filmmusic.io', and sound effects were downlaoded from 'https://opengameart.org'
 
+
+# ATTRIBUTIONS
+
 Sound_1: SCP-x7x (6th floor) - Kevin Maclead  
 Sound_2: Fox Tale Waltz - Kevin Maclead  
 Game Over Sound: https://opengameart.org/content/death-is-just-another-path  
 Customize Screen Sound: https://opengameart.org/content/epic-man-of-death-commercial  
 
-Ball_1 : https://en.m.wikipedia.org/wiki/File:Black_and_Red_Circle.png
+Ball_1 : https://en.m.wikipedia.org/wiki/File:Black_and_Red_Circle.png  
 Ball_2 : https://pngimg.com/image/24350
 
