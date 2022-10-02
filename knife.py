@@ -227,7 +227,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                     score += 1
                     knife_added += 1
 
-        # self.remove(deleted)
+        self.remove(deleted)
 
         for entity in self.sprites():
             if type(entity) is Powerup:

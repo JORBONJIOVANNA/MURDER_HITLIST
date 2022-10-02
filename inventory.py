@@ -12,7 +12,7 @@ class Inventory:
             img, (dimensions[0]*scale, dimensions[1]*scale))
         return img
 
-    def __init__(self, screen):
+    def __init__(self, screen,get_sounds,use_sounds):
         self.apples = 0
         self.screen = screen
         self.powerups = [False for x in range(3)]
@@ -20,6 +20,9 @@ class Inventory:
         self.has_shrunk = False
         self.SHRINKS = MAX_SHRINK_COUNT
         self.clock = pygame.time.Clock()
+        ''' sounds'''
+        self.get_sounds = get_sounds
+        self.use_sounds = use_sounds
         slow_img_inactive = pygame.image.load(
             "resources/game_icons/slow_inactive.png").convert_alpha()
 
@@ -64,10 +67,13 @@ class Inventory:
 
     def add_powerup(self, index):
         self.powerups[index] = True
+        pygame.mixer.Sound.play(self.get_sounds[index],fade_ms=250)
 
     def use_powerup(self, index):
         if self.powerups[index]:
             self.powerups[index] = False
+            max_t = 0 if index != SLOWTIME else 3000
+            pygame.mixer.Sound.play(self.use_sounds[index],fade_ms=250,maxtime=max_t)
             return True
         return False
 

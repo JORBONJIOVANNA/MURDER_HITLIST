@@ -402,6 +402,17 @@ def main():
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(0.1)
     knife_effect.set_volume(0.2)
+
+    power_get_sounds = [pygame.mixer.Sound(os.path.join(s, 'clock_get.mp3')), pygame.mixer.Sound(os.path.join(s, 'shrink_get.mp3')),pygame.mixer.Sound(os.path.join(s, 'life_get.mp3'))]
+    power_get_sounds[SLOWTIME].set_volume(1)
+    power_get_sounds[SHRINK].set_volume(0.7)
+    power_get_sounds[EXTRALIFE].set_volume(0.7)
+
+    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.mp3')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
+    power_use_sounds[SLOWTIME].set_volume(1)
+    power_use_sounds[SHRINK].set_volume(0.6)
+    power_use_sounds[EXTRALIFE].set_volume(0.7)
+
     change_music = False
 
     running = True
@@ -420,7 +431,7 @@ def main():
     next_level = True
     next_goal = 2
 
-    inventory = Inventory(myScreen)
+    inventory = Inventory(myScreen,power_get_sounds,power_use_sounds)
     circle = Circle((200, 200), [300, 300],
                     pygame.math.Vector2(0, 0), 2, circle_path)
 
