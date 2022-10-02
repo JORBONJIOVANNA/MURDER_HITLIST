@@ -7,10 +7,10 @@ import os
 from inventory import *
 import random
 
-#Leaderboard variables
+# Leaderboard variables
 leaderboard = False
 GREEN = (0, 255, 0)
-#Leaderboard variables
+# Leaderboard variables
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
@@ -54,15 +54,15 @@ circle_2 = pygame.image.load(
 circle_2 = pygame.transform.scale(circle_2, (100, 100))
 
 powerup_1 = pygame.image.load(
-                "resources/game_icons/slow_menu.png").convert_alpha()
+    "resources/game_icons/slow_menu.png").convert_alpha()
 powerup_1 = pygame.transform.scale(powerup_1, (75, 75))
 
 powerup_2 = pygame.image.load(
-                "resources/game_icons/shrink_menu.png").convert_alpha()
+    "resources/game_icons/shrink_menu.png").convert_alpha()
 powerup_2 = pygame.transform.scale(powerup_2, (75, 75))
 
 powerup_3 = pygame.image.load(
-                "resources/game_icons/extra_active.png").convert_alpha()
+    "resources/game_icons/extra_active.png").convert_alpha()
 powerup_3 = pygame.transform.scale(powerup_3, (75, 75))
 
 knife = pygame.image.load("resources/sword.png").convert_alpha()
@@ -137,7 +137,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         menu_img = pygame.transform.scale(menu_img, (600, 600))
         myScreen.blit(menu_img, (0, 0))
 
-
     if not(leaderboard) and not(customization_screen):
         if last_level == 0:
             game_name_rect = game_name.get_rect(center=(SCREEN_WIDTH/2, 80))
@@ -149,7 +148,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                 center=(SCREEN_WIDTH/2, 80))
             myScreen.blit(last_level_text, last_level_rect)
 
-    #back button
+    # back button
     if customization_screen or leaderboard:
         back_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/6-80, SCREEN_HEIGHT/6-70, 80, 40])
@@ -163,10 +162,11 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(back_text, (SCREEN_WIDTH /
                       6-80, SCREEN_HEIGHT/6-60))
     if customization_screen:
-        
+
         pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 80, 340, 45])
         customize_name = big_font.render('CHANGE TARGET', True, WHITE)
-        customize_name_rect = customize_name.get_rect(center=(SCREEN_WIDTH/2, 90))
+        customize_name_rect = customize_name.get_rect(
+            center=(SCREEN_WIDTH/2, 90))
         myScreen.blit(customize_name, customize_name_rect)
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
@@ -189,37 +189,40 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
             if option_2:
                 pygame.draw.rect(myScreen, WHITE, [
                     SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
-                myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
+                myScreen.blit(
+                    choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
             else:
                 pygame.draw.rect(myScreen, DARK_RED, [
-                SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
-                myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
+                    SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(
+                    choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
             if option_1:
                 pygame.draw.rect(myScreen, WHITE, [
                     SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
-                myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
-            else:   
+                myScreen.blit(
+                    choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
+            else:
                 pygame.draw.rect(myScreen, DARK_RED, [
-                SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
-                myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
+                    SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
+                myScreen.blit(
+                    choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
         else:
             pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
+                SCREEN_WIDTH/2+100, SCREEN_HEIGHT-150, 140, 40])
             myScreen.blit(choose_text, (SCREEN_WIDTH/2+100, SCREEN_HEIGHT-140))
 
             pygame.draw.rect(myScreen, DARK_RED, [
                 SCREEN_WIDTH/4-60, SCREEN_HEIGHT-150, 140, 40])
             myScreen.blit(choose_text, (SCREEN_WIDTH/4-60, SCREEN_HEIGHT-140))
-    
+
     elif leaderboard:
-        
+
         pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, 30, 340, 45])
         leader_name = big_font.render('LEADERBOARD', True, WHITE)
         leader_name_rect = leader_name.get_rect(center=(SCREEN_WIDTH/2, 55))
         myScreen.blit(leader_name, leader_name_rect)
-        
 
-        for i in range (0, len(score_list)):
+        for i in range(0, len(score_list)):
 
             # only top 5
             if i == 5:
@@ -231,34 +234,36 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
                 bg_color = GREY
             person = small_font.render(
                 '{} : {}'.format(score_list[i][0], score_list[i][1]), True, colour)
-            pygame.draw.rect(myScreen, bg_color, [SCREEN_WIDTH/4, 160+70*i, SCREEN_WIDTH/2, 40])
+            pygame.draw.rect(myScreen, bg_color, [
+                             SCREEN_WIDTH/4, 160+70*i, SCREEN_WIDTH/2, 40])
             myScreen.blit(person, (SCREEN_WIDTH/3 - 40, 170+70*i))
         if len(score_list) != 0:
-            myScreen.blit(knife,(SCREEN_WIDTH-200,SCREEN_HEIGHT/2-160))
+            myScreen.blit(knife, (SCREEN_WIDTH-200, SCREEN_HEIGHT/2-160))
         else:
             # pygame.draw.rect(myScreen, BLACK, [SCREEN_WIDTH/4-20, SCREEN_HEIGHT/2, 340, 45])
             first_line = small_font.render('WE HAVE BEEN WAITING', True, WHITE)
-            first_line_rect = first_line.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+            first_line_rect = first_line.get_rect(
+                center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
             myScreen.blit(first_line, first_line_rect)
             second_line = small_font.render('FOR YOU', True, WHITE)
-            second_line_rect = second_line.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+60))
+            second_line_rect = second_line.get_rect(
+                center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2+60))
             myScreen.blit(second_line, second_line_rect)
 
     else:
-        #Leaderboard button
+        # Leaderboard button
         leader_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3-20, SCREEN_HEIGHT/2-50, 240, 40])
 
         leader_text = small_font.render('LEADERBOARD', True, BLACK)
 
         if leader_rect.collidepoint(mouse_pos):
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             leader_text = small_font.render('LEADERBOARD', True, WHITE)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
         myScreen.blit(leader_text, (SCREEN_WIDTH/3-13, SCREEN_HEIGHT/2-40))
-        #Leaderboard button
+        # Leaderboard button
 
         start_rect = pygame.draw.rect(myScreen, DARK_RED, [
             SCREEN_WIDTH/3+30, SCREEN_HEIGHT/2-100, 140, 40])
@@ -266,7 +271,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         start_text = small_font.render('START', True, BLACK)
 
         if start_rect.collidepoint(mouse_pos):
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             start_text = small_font.render('START', True, WHITE)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
@@ -291,7 +295,7 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         #     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
         # myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
 
-        if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos):
+        if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos) or leader_rect.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
@@ -300,7 +304,6 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(powerup_1, (SCREEN_WIDTH/5-60, SCREEN_HEIGHT-100))
         myScreen.blit(powerup_2, (SCREEN_WIDTH/2-30, SCREEN_HEIGHT-100))
         myScreen.blit(powerup_3, (SCREEN_WIDTH-120, SCREEN_HEIGHT-100))
-
 
     return tick, image_index
 
@@ -384,7 +387,7 @@ def main():
         start_transition_index_1 = 178
         start_transition_index_2 = 0
         myScreen.fill((0, 0, 0))
-        kA = KnivesAirbourne(myScreen, circle, level,inventory)
+        kA = KnivesAirbourne(myScreen, circle, level, inventory)
         knife_obj = Knife((0, 1), 10)
         kA.add(knife_obj)
         change_music = True
@@ -460,8 +463,8 @@ def main():
     circle = Circle((200, 200), [300, 300],
                     pygame.math.Vector2(0, 0), 2, circle_path)
 
-    kA = KnivesAirbourne(myScreen, circle, level,inventory)
-    
+    kA = KnivesAirbourne(myScreen, circle, level, inventory)
+
     knife_obj = Knife((0, 1), 10)
     kA.add_wrapper(knife_obj)
     customization_screen = False
@@ -518,21 +521,22 @@ def main():
                             kA.current.scale = True
                             kA.current.img = pygame.transform.scale(
                                 kA.current.img, (dimensions[0]*0.5, dimensions[1]*0.5))
-                            inventory.SHRINKS  = MAX_SHRINK_COUNT
-                        #use powerup
+                            inventory.SHRINKS = MAX_SHRINK_COUNT
+                        # use powerup
                         pass
                     else:
-                        #play noise indicating it can't be used
+                        # play noise indicating it can't be used
                         pass
                 elif event.key == pygame.K_a:
-                    if inventory.use_powerup(SLOWTIME): #inventory.powerups[SLOWTIME]:
-                        #use powerup
+                    # inventory.powerups[SLOWTIME]:
+                    if inventory.use_powerup(SLOWTIME):
+                        # use powerup
                         print("slow")
                         circle.is_slowed = True
                         circle.speed /= 3
                         pass
                     else:
-                        #play noise indicating it can't be used
+                        # play noise indicating it can't be used
                         pass
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not(write_name):
@@ -548,7 +552,7 @@ def main():
 
                 elif SCREEN_WIDTH/3 <= mouse[0] <= SCREEN_WIDTH/3+200 and SCREEN_HEIGHT/2 <= mouse[1] <= SCREEN_HEIGHT/2+40:
                     customization_screen = True
-                
+
                 elif SCREEN_WIDTH/4-20 <= mouse[0] <= SCREEN_WIDTH/3+340 and SCREEN_HEIGHT/2-50 <= mouse[1] <= SCREEN_HEIGHT/2-5:
                     leaderboard = True
                 elif SCREEN_WIDTH/6-80 <= mouse[0] <= SCREEN_WIDTH/6 and SCREEN_HEIGHT/6-70 <= mouse[1] <= SCREEN_HEIGHT/2-30:
@@ -569,11 +573,11 @@ def main():
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+3, circle_path)
 
-        #If asking for user input for new high score
+        # If asking for user input for new high score
         if write_name:
             tick, image_index = insert_name(tick, image_index, myScreen, level)
-        
-        #Playing game part
+
+        # Playing game part
         elif game_start and not(start_animation):
 
             if knife_added >= level_goal and next_level:
@@ -589,10 +593,11 @@ def main():
                         if start_transition_index_1 > 336:
                             level_transition = False
                             start_transition_index_1 = 178
-    
+
                         transition = pygame.image.load(
                             "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_transition_index_1)).convert_alpha()
-                        transition = pygame.transform.scale(transition, (600, 600))
+                        transition = pygame.transform.scale(
+                            transition, (600, 600))
                         myScreen.blit(transition, (0, 0))
                     else:
                         start_transition_index_2 += 1
@@ -601,10 +606,11 @@ def main():
                         if start_transition_index_2 > 150:
                             level_transition = False
                             start_transition_index_2 = 0
-    
+
                         transition = pygame.image.load(
                             "resources/start_animation/frame_{:03d}_delay-0.03s.gif".format(start_transition_index_2)).convert_alpha()
-                        transition = pygame.transform.scale(transition, (600, 600))
+                        transition = pygame.transform.scale(
+                            transition, (600, 600))
                         myScreen.blit(transition, (0, 0))
 
                 if not(level_transition):
@@ -622,14 +628,13 @@ def main():
                     # this is to reset everything and add new knives and circle
                     circle = Circle((200, 200), [300, 300],  pygame.math.Vector2(
                         0, 0), level+1, circle_path)
-                    kA = KnivesAirbourne(myScreen, circle, level,inventory)
+                    kA = KnivesAirbourne(myScreen, circle, level, inventory)
                     knife_obj = Knife((0, 1), 10)
                     kA.add_wrapper((knife_obj))
                     next_level = True
                     level_goal = min(level + 1, 50)
                     next_goal += level_goal
                     knife_added = 0
-                
 
                 # continue coz we need to get rid of the old stuff by sending it to the pygame.update line
                 # with this continue keyword
