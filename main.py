@@ -453,8 +453,8 @@ def main():
     power_get_sounds[SHRINK].set_volume(0.7)
     power_get_sounds[EXTRALIFE].set_volume(0.7)
 
-    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.wav')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.wav')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
-    power_use_sounds[SLOWTIME].set_volume(0.6)
+    power_use_sounds = [pygame.mixer.Sound(os.path.join(s, 'slow_mo_use.ogg')), pygame.mixer.Sound(os.path.join(s, 'shrink_use.ogg')),pygame.mixer.Sound(os.path.join(s, 'life_use.mp3'))]
+    power_use_sounds[SLOWTIME].set_volume(0.3)
     power_use_sounds[SHRINK].set_volume(0.45)
     power_use_sounds[EXTRALIFE].set_volume(0.6)
 
