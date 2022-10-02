@@ -237,11 +237,11 @@ def menu_screen(tick, image_index, myScreen, customization_screen, leaderboard, 
         myScreen.blit(customize_text, (SCREEN_WIDTH /
                       3+10, SCREEN_HEIGHT/2 + 10))
 
-        high_score_text = small_font.render(
-            'HIGH SCORE: {}'.format(high_score), True, BLACK)
-        pygame.draw.rect(myScreen, DARK_RED, [
-            SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
-        myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
+        # high_score_text = small_font.render(
+        #     'HIGH SCORE: {}'.format(high_score), True, BLACK)
+        # pygame.draw.rect(myScreen, DARK_RED, [
+        #     SCREEN_WIDTH/3-30, SCREEN_HEIGHT-100, 300, 40])
+        # myScreen.blit(high_score_text, (SCREEN_WIDTH/3-10, SCREEN_HEIGHT-90))
 
         if customize_rect.collidepoint(mouse_pos) or start_rect.collidepoint(mouse_pos):
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
@@ -401,7 +401,7 @@ def main():
     last_score = -1
     next_level = True
     next_goal = 2
-    
+
     inventory = Inventory(myScreen)
     circle = Circle((200, 200), [300, 300],
                     pygame.math.Vector2(0, 0), 2, circle_path)
@@ -415,13 +415,13 @@ def main():
     while running:
         pygame.display.update()
         # get high score
-        with open("high_scores.txt", 'r+') as w:
-            try:
-                line = w.readline().split(",")
-                high_score = int(line[1])
+        # with open("high_scores.txt", 'r+') as w:
+        #     try:
+        #         line = w.readline().split(",")
+        #         high_score = int(line[1])
 
-            except:
-                high_score = 0
+        #     except:
+        #         high_score = 0
 
         if change_music:
             pygame.mixer.music.play(-1)

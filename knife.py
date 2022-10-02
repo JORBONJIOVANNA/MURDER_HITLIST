@@ -67,7 +67,6 @@ class Knife(pygame.sprite.Sprite):
                 self.img, self.stuck_angle, circle.pivot, pygame.math.Vector2(0, 140))
             screen.blit(new_img, new_rect)
             self.rotated_rect = new_rect
-            # print(new_rect)
             return
 
         if self.location[1] != self.shoot_location[1]:
@@ -225,7 +224,7 @@ class KnivesAirbourne(pygame.sprite.Group):
                     score += 1
                     knife_added += 1
 
-        self.remove(deleted)
+        # self.remove(deleted)
 
         for entity in self.sprites():
             if type(entity) is Powerup:
